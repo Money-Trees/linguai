@@ -7,6 +7,8 @@ import { AuthModule } from '../api/auth/auth.module';
 import { UserModule } from '../api/user/user.module';
 import { TypeOrmConfigService } from '../database/typeorm.service';
 import { LoggerMiddleware } from './logger.middleware';
+import { TaskModule } from '../api/task/task.module';
+import { LessonModule } from '../api/lesson/lesson.module';
 
 @Module({
   imports: [
@@ -18,6 +20,8 @@ import { LoggerMiddleware } from './logger.middleware';
     }),
     AuthModule,
     UserModule,
+    LessonModule,
+    TaskModule,
   ],
   controllers: [],
   providers: [],

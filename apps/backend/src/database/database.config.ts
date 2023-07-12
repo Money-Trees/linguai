@@ -1,6 +1,8 @@
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 import { UserEntity } from '../api/user/user.entity';
 import { env } from '../env';
+import { LessonEntity } from '../api/lesson/lesson.entity';
+import { TaskEntity } from '../api/task/task.entity';
 
 export const pgConnection = {
   host: env.DB_HOST,
@@ -22,5 +24,5 @@ export const typeormConnection: PostgresConnectionOptions = {
   type: 'postgres',
   username: pgConnection.user,
   synchronize: env.DB_SYNC,
-  entities: [UserEntity],
+  entities: [UserEntity, LessonEntity, TaskEntity],
 };

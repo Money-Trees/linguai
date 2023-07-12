@@ -1,4 +1,4 @@
-import { Role } from './enums';
+import { Role, TaskType } from './enums';
 
 export interface ResponseError {
   statusCode: number;
@@ -12,6 +12,11 @@ export interface Document {
   updated_at: Date;
 }
 
+export interface Auth {
+  authenticated: boolean;
+  userId?: string;
+}
+
 export interface User extends Document {
   email: string;
   firstname: string;
@@ -20,7 +25,14 @@ export interface User extends Document {
   image?: string;
 }
 
-export interface Auth {
-  authenticated: boolean;
-  userId?: string;
+export interface Lesson extends Document {
+  name: string;
+  userId: string;
+}
+
+export interface Task extends Document {
+  question: string;
+  answer: string;
+  type: TaskType;
+  lessonId: string;
 }
