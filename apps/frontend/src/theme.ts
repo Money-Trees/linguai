@@ -12,11 +12,9 @@ const config: ThemeConfig = {
 const components: Record<string, StyleConfig> = {
   Card: {
     baseStyle: {
-      container: {
+      backgroundColor: 'gray.800',
+      _dark: {
         backgroundColor: 'white',
-        _dark: {
-          backgroundColor: 'gray.800',
-        },
       },
     },
   },
