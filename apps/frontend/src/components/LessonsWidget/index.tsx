@@ -1,37 +1,33 @@
 import { ReactElement } from 'react';
-import { VStack, Text, Card, Grid } from '@chakra-ui/react';
+import { VStack, Text, Grid } from '@chakra-ui/react';
+import LessonCard from './LessonCard';
+import { Lesson } from '@naite/types';
 
 interface Props {
   title: string;
-  lessonNames: string[];
-  onSelect: (lessonName: string) => void;
+  lessons: Lesson[];
+  onStartLesson: (lesson: Lesson) => void;
 }
 
 const LessonsWidget = ({
   title,
-  lessonNames,
-  onSelect,
+  lessons,
+  onStartLesson,
 }: Props): ReactElement => {
   return (
     <VStack width="full" overflowX="scroll" alignItems="flex-start">
       <Text fontSize={24}>{title}</Text>
       <Grid gridTemplateColumns="1fr 1fr 1fr 1fr" gap="8px">
-        {lessonNames.length ? (
-          lessonNames.map((lesson) => (
-            <Card
-              key={lesson}
-              p={4}
-              textAlign="center"
-              cursor="pointer"
-              onClick={() => onSelect(lesson)}
-            >
-              <Text as="b" textTransform="capitalize">
-                {lesson}
-              </Text>
-            </Card>
+        {lessons.length ? (
+          lessons.map((lesson) => (
+            <LessonCard
+              key={lesson.id}
+              lesson={lesson}
+              onStartLesson={onStartLesson}
+            />
           ))
         ) : (
-          <Text>No lessons</Text>
+          <Text>No lessons yet</Text>
         )}
       </Grid>
     </VStack>

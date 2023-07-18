@@ -46,14 +46,7 @@ const ModalContainer = ({
       <ModalContent ref={initialFocusRef} as="form" onSubmit={onSubmit}>
         <ModalCloseButton />
         <ModalHeader>{title}</ModalHeader>
-        <ModalBody
-          display="grid"
-          gridTemplateColumns="1fr 1fr"
-          gap="4"
-          flexDirection="column"
-        >
-          {children}
-        </ModalBody>
+        <ModalBody>{children}</ModalBody>
         <ModalFooter>
           <Button
             disabled={isLoading}

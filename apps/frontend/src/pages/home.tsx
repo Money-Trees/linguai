@@ -1,4 +1,4 @@
-import { Button, Show, useDisclosure, VStack } from '@chakra-ui/react';
+import { Button, Card, Show, useDisclosure, VStack } from '@chakra-ui/react';
 import { FormEventHandler, ReactElement, useEffect, useState } from 'react';
 import SelectInput from '../components/Inputs/SelectInput';
 import { Language, Lesson } from '@naite/types';
@@ -20,15 +20,6 @@ const HomePage = (): ReactElement => {
     }
   }, [onOpen, recommendedLesson]);
 
-  const recommendedTopics = [
-    'hobbies',
-    'family',
-    'pets',
-    'travel',
-    'food',
-    'country',
-  ];
-
   const onSubmit: FormEventHandler = (event) => {
     event.preventDefault();
   };
@@ -39,7 +30,7 @@ const HomePage = (): ReactElement => {
   };
 
   return (
-    <>
+    <Card width="80%" p={8}>
       <VStack rowGap="32px">
         <SelectInput
           options={Object.values(Language)}
@@ -53,13 +44,8 @@ const HomePage = (): ReactElement => {
         </Button>
         <LessonsWidget
           title="Your Lessons"
-          lessonNames={lessons.map((lesson: Lesson) => lesson.name)}
-          onSelect={() => null}
-        />
-        <LessonsWidget
-          title="Recommended Lessons"
-          lessonNames={recommendedTopics}
-          onSelect={(lessonName) => setRecommendedLesson({ theme: lessonName })}
+          lessons={lessons}
+          onStartLesson={() => null}
         />
       </VStack>
       <Show above="md">
@@ -70,10 +56,7 @@ const HomePage = (): ReactElement => {
           title="Add new Lesson"
           confirmText="Add"
         >
-          <LessonForm
-            language={language}
-            initialLessonData={recommendedLesson}
-          />
+          <LessonForm language={language} />
         </ModalContainer>
       </Show>
       <Show below="md">
@@ -84,13 +67,10 @@ const HomePage = (): ReactElement => {
           title="Add new Lesson"
           confirmText="Add"
         >
-          <LessonForm
-            language={language}
-            initialLessonData={recommendedLesson}
-          />
+          <LessonForm language={language} />
         </DrawerContainer>
       </Show>
-    </>
+    </Card>
   );
 };
 

@@ -79,7 +79,7 @@ const App = (): JSX.Element => {
         backgroundColor="gray.100"
         _dark={{ backgroundColor: 'gray.900' }}
       >
-        <VStack width="100vw">
+        <VStack gap={4} width="100vw">
           <Navbar />
           <Routes>
             {routes

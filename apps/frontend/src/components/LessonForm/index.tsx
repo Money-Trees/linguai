@@ -1,5 +1,13 @@
 import { ReactElement, useState } from 'react';
-import { FormControl, FormLabel, Input, Text, VStack } from '@chakra-ui/react';
+import {
+  Box,
+  FormControl,
+  FormLabel,
+  Heading,
+  Input,
+  Text,
+  VStack,
+} from '@chakra-ui/react';
 import {
   FrenchTopic,
   GermanTopic,
@@ -11,7 +19,6 @@ import SelectInput from '../Inputs/SelectInput';
 
 interface Props {
   language: Language;
-  initialLessonData?: Partial<Lesson>;
 }
 
 const getTopics = (language: Language): Topic[] => {
@@ -24,38 +31,51 @@ const getTopics = (language: Language): Topic[] => {
   }
 };
 
-const LessonForm = ({ language, initialLessonData }: Props): ReactElement => {
-  const [lessonData, setLessonData] = useState<Partial<Lesson>>(
-    initialLessonData || {}
-  );
+const LessonForm = ({ language }: Props): ReactElement => {
+  const [lessonData, setLessonData] = useState<Partial<Lesson>>({ language });
 
   return (
-    <VStack>
+    <VStack gap="16px" alignItems="flex-start">
       <FormControl isRequired>
-        <FormLabel>What topic would you like to practice?</FormLabel>
-        <Text fontSize={12}>e.g. Work, Travel, Hobbies...</Text>
+        <FormLabel>Name</FormLabel>
         <Input
           value={lessonData.theme}
           onChange={(event) =>
             setLessonData((prevState) => ({
               ...prevState,
-              theme: event.target.value,
+              name: event.target.value,
             }))
           }
         />
       </FormControl>
-      <SelectInput
-        options={getTopics(language)}
-        value={lessonData.topic as string}
-        label="What would you like to practice?"
-        onChange={(value) =>
-          setLessonData((prevState) => ({
-            ...prevState,
-            topic: value as Topic,
-          }))
-        }
-        getOptionLabel={(option) => option}
-      />
+      <Box>
+        <Heading size="md">What would you like to practice?</Heading>
+        <FormControl isRequired>
+          <FormLabel>Topic</FormLabel>
+          <Text fontSize={12}>e.g. Work, Travel, Hobbies...</Text>
+          <Input
+            value={lessonData.theme}
+            onChange={(event) =>
+              setLessonData((prevState) => ({
+                ...prevState,
+                theme: event.target.value,
+              }))
+            }
+          />
+        </FormControl>
+        <SelectInput
+          options={getTopics(language)}
+          value={lessonData.topic as string}
+          label="Grammar concept"
+          onChange={(value) =>
+            setLessonData((prevState) => ({
+              ...prevState,
+              topic: value as Topic,
+            }))
+          }
+          getOptionLabel={(option) => option}
+        />
+      </Box>
     </VStack>
   );
 };
