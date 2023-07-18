@@ -6,3 +6,15 @@ export type GoogleUser = Profile['_json'] & {
 };
 
 export type RequestBody<T> = Omit<T, 'id' | 'created_at' | 'updated_at'>;
+
+export type PromptTemplate<T> = {
+  id: string;
+  render: (params: T) => string;
+};
+
+export class Prompt<T> {
+  private constructor(public template: PromptTemplate<T>, public params: T) {}
+  public render(): string {
+    return this.template.render(this.params);
+  }
+}

@@ -36,3 +36,9 @@ export interface Task extends Document {
   type: TaskType;
   lessonId: string;
 }
+
+export interface LessonConfig {
+  language: string;
+  topic: string;
+  verbForms: string[];
+}
