@@ -1,10 +1,9 @@
 import {
-  Box,
   CircularProgress,
   Grid,
   ListItem,
   UnorderedList,
-  useDisclosure,
+  VStack,
 } from '@chakra-ui/react';
 import { useQueryClient } from '@tanstack/react-query';
 import { ResponseError, Role } from '@naite/types';
@@ -13,7 +12,7 @@ import isArray from 'lodash/isArray';
 import { Route, Routes } from 'react-router-dom';
 import DevBanner, { BANNER_HEIGHT } from './components/DevBanner';
 import Navbar from './components/Navigation/Navbar';
-import Sidebar, { SIDEBAR_WIDTH } from './components/Navigation/Sidebar';
+import { SIDEBAR_WIDTH } from './components/Navigation/Sidebar';
 import { env } from './env';
 import { useNotification } from './hooks/useNotification';
 import LoginPage from './pages/login';
@@ -49,7 +48,6 @@ const App = (): JSX.Element => {
     },
   });
 
-  const { onOpen, onClose, isOpen } = useDisclosure();
   const notification = useNotification();
   const { data: authenticated, isLoading } = useAuthStatus();
   const { data: user } = useAuthUser();
@@ -81,14 +79,8 @@ const App = (): JSX.Element => {
         backgroundColor="gray.100"
         _dark={{ backgroundColor: 'gray.900' }}
       >
-        <Sidebar isOpen={isOpen} onClose={onClose} />
-        <Box
-          height={height}
-          overflow="scroll"
-          padding={{ base: '4', md: '8' }}
-          paddingTop={{ base: 20 + (env.IS_DEV ? BANNER_HEIGHT : 0), md: '8' }}
-        >
-          <Navbar onOpen={onOpen} />
+        <VStack width="100vw">
+          <Navbar />
           <Routes>
             {routes
               .filter(
@@ -101,7 +93,7 @@ const App = (): JSX.Element => {
               ))}
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
-        </Box>
+        </VStack>
       </Grid>
     </>
   );

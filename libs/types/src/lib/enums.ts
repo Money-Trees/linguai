@@ -6,3 +6,8 @@ export enum Role {
 export enum TaskType {
   Cloze = 'cloze',
 }
+
+export enum Language {
+  German = 'german',
+  French = 'french',
+}
