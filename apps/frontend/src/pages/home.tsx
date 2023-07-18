@@ -1,15 +1,24 @@
 import { Button, Show, useDisclosure, VStack } from '@chakra-ui/react';
-import { FormEventHandler, ReactElement, useState } from 'react';
+import { FormEventHandler, ReactElement, useEffect, useState } from 'react';
 import SelectInput from '../components/Inputs/SelectInput';
-import { Language } from '@naite/types';
+import { Language, Lesson } from '@naite/types';
 import LessonsWidget from '../components/LessonsWidget';
 import ModalContainer from '../components/ModalContainer';
 import DrawerContainer from '../components/DrawerContainer';
 import LessonForm from '../components/LessonForm';
+import { useLessons } from '../services/lesson.service';
 
 const HomePage = (): ReactElement => {
+  const { data: lessons = [] } = useLessons();
   const [language, setLanguage] = useState(Language.German);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [recommendedLesson, setRecommendedLesson] = useState<Partial<Lesson>>();
+
+  useEffect(() => {
+    if (recommendedLesson) {
+      onOpen();
+    }
+  }, [onOpen, recommendedLesson]);
 
   const recommendedTopics = [
     'hobbies',
@@ -20,12 +29,13 @@ const HomePage = (): ReactElement => {
     'country',
   ];
 
-  const addLesson = (lessonName: string): void => {
-    console.log(lessonName);
-  };
-
   const onSubmit: FormEventHandler = (event) => {
     event.preventDefault();
+  };
+
+  const handleClose = (): void => {
+    setRecommendedLesson(undefined);
+    onClose();
   };
 
   return (
@@ -42,36 +52,42 @@ const HomePage = (): ReactElement => {
           Add new Lesson
         </Button>
         <LessonsWidget
-          title="Lessons"
-          lessonNames={[]}
-          onSelect={(lessonName) => addLesson(lessonName)}
+          title="Your Lessons"
+          lessonNames={lessons.map((lesson: Lesson) => lesson.name)}
+          onSelect={() => null}
         />
         <LessonsWidget
           title="Recommended Lessons"
           lessonNames={recommendedTopics}
-          onSelect={(lessonName) => addLesson(lessonName)}
+          onSelect={(lessonName) => setRecommendedLesson({ theme: lessonName })}
         />
       </VStack>
       <Show above="md">
         <ModalContainer
           isOpen={isOpen}
-          onClose={onClose}
+          onClose={handleClose}
           onSubmit={onSubmit}
           title="Add new Lesson"
           confirmText="Add"
         >
-          <LessonForm />
+          <LessonForm
+            language={language}
+            initialLessonData={recommendedLesson}
+          />
         </ModalContainer>
       </Show>
       <Show below="md">
         <DrawerContainer
           isOpen={isOpen}
-          onClose={onClose}
+          onClose={handleClose}
           onSubmit={onSubmit}
           title="Add new Lesson"
           confirmText="Add"
         >
-          <LessonForm />
+          <LessonForm
+            language={language}
+            initialLessonData={recommendedLesson}
+          />
         </DrawerContainer>
       </Show>
     </>

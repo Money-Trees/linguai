@@ -1,4 +1,4 @@
-import { Role, TaskType } from './enums';
+import { FrenchTopic, GermanTopic, Role, TaskType } from './enums';
 
 export interface ResponseError {
   statusCode: number;
@@ -28,6 +28,8 @@ export interface User extends Document {
 export interface Lesson extends Document {
   name: string;
   userId: string;
+  theme: string;
+  topic: GermanTopic | FrenchTopic;
 }
 
 export interface Task extends Document {

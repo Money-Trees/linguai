@@ -11,3 +11,14 @@ export enum Language {
   German = 'german',
   French = 'french',
 }
+
+export enum GermanTopic {
+  Articles = 'articles',
+  PossessivePronouns = 'possessivePronouns',
+  PresentTense = 'presentTense',
+}
+export enum FrenchTopic {
+  Articles = 'articles',
+  PresentTense = 'presentTense',
+  CompositePastTense = 'compositePastTense',
+}
