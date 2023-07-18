@@ -1,4 +1,4 @@
-import { Lesson, User } from '@naite/types';
+import { Language, Lesson, Topic, User } from '@naite/types';
 import { Column, Entity } from 'typeorm';
 import { DocumentEntity } from '../../database/document.entity';
 
@@ -9,4 +9,18 @@ export class LessonEntity extends DocumentEntity implements Lesson {
 
   @Column({ type: 'uuid' })
   public userId!: User['id'];
+
+  @Column({
+    type: 'enum',
+    enum: Language,
+  })
+  public language: Language;
+
+  @Column()
+  public theme: string;
+
+  @Column({
+    type: 'varchar',
+  })
+  public topic: Topic;
 }

@@ -19,10 +19,9 @@ import {
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
-import { Role, Lesson } from '@naite/types';
+import { Lesson } from '@naite/types';
 import { DeleteResult } from 'typeorm';
 import { ErrorDto } from '../../app/error.dto';
-import { Roles } from '../auth/roles.decorator';
 import { UpdateLessonDto, LessonDto } from './lesson.dto';
 import { LessonService } from './lesson.service';
 
@@ -50,7 +49,6 @@ export class LessonController {
   }
 
   @Post()
-  @Roles(Role.Admin)
   @ApiOperation({ summary: 'Create a task' })
   @ApiCreatedResponse({ type: LessonDto })
   @ApiBadRequestResponse({ type: ErrorDto })
@@ -59,7 +57,6 @@ export class LessonController {
   }
 
   @Delete(':id')
-  @Roles(Role.Admin)
   @ApiOperation({ summary: 'Delete a task by id' })
   @ApiOkResponse({ type: DeleteResult })
   @ApiNotFoundResponse({ type: ErrorDto })
@@ -90,7 +87,6 @@ export class LessonController {
   }
 
   @Patch(':id')
-  @Roles(Role.Admin)
   @ApiOperation({ summary: 'Update a task by id' })
   @ApiOkResponse({ type: LessonDto })
   @ApiBadRequestResponse({ type: ErrorDto })
