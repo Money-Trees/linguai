@@ -1,6 +1,6 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { Lesson, Task, TaskType } from '@naite/types';
-import { IsEnum, IsString, IsUUID } from 'class-validator';
+import { IsBoolean, IsEnum, IsString, IsUUID } from 'class-validator';
 import { DocumentDto } from '../../database/document.dto';
 
 export class TaskDto extends DocumentDto implements Task {
@@ -21,6 +21,14 @@ export class TaskDto extends DocumentDto implements Task {
     example: TaskType.Cloze,
   })
   public type: TaskType;
+
+  @IsBoolean()
+  @ApiProperty({ example: false })
+  public isCompleted?: boolean;
+
+  @IsString()
+  @ApiProperty({ example: 'Die' })
+  public modelAnswer: string;
 }
 
 export class UpdateTaskDto extends PartialType(TaskDto) {}

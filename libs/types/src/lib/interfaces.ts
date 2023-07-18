@@ -32,11 +32,13 @@ export interface Lesson extends Document {
   language: Language;
   theme: string;
   topic: Topic;
+  tasks?: Task[];
 }
 
 export interface Task extends Document {
   question: string;
-  answer: string;
+  modelAnswer: string;
+  isCompleted?: boolean;
   type: TaskType;
   lessonId: string;
 }

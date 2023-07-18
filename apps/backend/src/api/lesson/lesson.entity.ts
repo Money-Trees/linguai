@@ -1,6 +1,8 @@
-import { Language, Lesson, Topic, User } from '@naite/types';
-import { Column, Entity } from 'typeorm';
+import { Language, Lesson, Task, Topic, User } from '@naite/types';
+import { Column, Entity, OneToMany } from 'typeorm';
 import { DocumentEntity } from '../../database/document.entity';
+import { TaskEntity } from '../task/task.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity('lesson')
 export class LessonEntity extends DocumentEntity implements Lesson {
@@ -23,4 +25,8 @@ export class LessonEntity extends DocumentEntity implements Lesson {
     type: 'varchar',
   })
   public topic: Topic;
+
+  @Exclude()
+  @OneToMany(() => TaskEntity, (taskEntity) => taskEntity.lessonId)
+  public readonly tasks?: Task[];
 }

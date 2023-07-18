@@ -37,6 +37,16 @@ export class TaskService {
     return task;
   }
 
+  public async createTasks(tasks: Partial<Task>[]): Promise<Task[]> {
+    return Promise.all(
+      tasks.map((task) => {
+        const taskEntity = this.repository.create(task);
+
+        return this.repository.save(taskEntity);
+      })
+    );
+  }
+
   public async deleteTaskById(id: string): Promise<DeleteResult> {
     const result = await this.repository.delete(id);
 

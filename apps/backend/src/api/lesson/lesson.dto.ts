@@ -1,13 +1,14 @@
-import { ApiProperty, PartialType } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional, PartialType } from '@nestjs/swagger';
 import {
   GermanTopic,
   Language,
   Lesson,
+  Task,
   TaskType,
   Topic,
   User,
 } from '@naite/types';
-import { IsEnum, IsString, IsUUID } from 'class-validator';
+import { IsEnum, IsOptional, IsString, IsUUID } from 'class-validator';
 import { DocumentDto } from '../../database/document.dto';
 
 export class LessonDto extends DocumentDto implements Lesson {
@@ -34,6 +35,10 @@ export class LessonDto extends DocumentDto implements Lesson {
     example: GermanTopic.Articles,
   })
   public topic: Topic;
+
+  @IsOptional()
+  @ApiPropertyOptional()
+  public tasks: Task[];
 }
 
 export class UpdateLessonDto extends PartialType(LessonDto) {}
