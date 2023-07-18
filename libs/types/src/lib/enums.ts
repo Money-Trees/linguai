@@ -12,13 +12,13 @@ export enum Language {
   French = 'french',
 }
 
-export enum GermanTopics {
+export enum GermanTopic {
   Articles = 'articles',
   PossessivePronouns = 'possessivePronouns',
   PresentTense = 'presentTense',
 }
 
-export enum FrenchTopics {
+export enum FrenchTopic {
   Articles = 'articles',
   PresentTense = 'presentTense',
   CompositePastTense = 'compositePastTense',

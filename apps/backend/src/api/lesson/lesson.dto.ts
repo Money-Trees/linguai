@@ -1,6 +1,6 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 import {
-  GermanTopics,
+  GermanTopic,
   Language,
   Lesson,
   TaskType,
@@ -31,7 +31,7 @@ export class LessonDto extends DocumentDto implements Lesson {
 
   @IsString()
   @ApiProperty({
-    example: GermanTopics.Articles,
+    example: GermanTopic.Articles,
   })
   public topic: Topic;
 }
