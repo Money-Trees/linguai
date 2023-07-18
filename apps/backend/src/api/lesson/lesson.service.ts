@@ -6,10 +6,12 @@ import {
 } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Lesson, Role, User } from '@naite/types';
+import { Lesson, Prompt, Role, User } from '@naite/types';
 import { DeleteResult, Repository } from 'typeorm';
 import { LessonEntity } from './lesson.entity';
 import { UserEntity } from '../user/user.entity';
+import { OpenAiService } from './openai.service';
+import { lessonPromptTemplate } from './lesson.prompt-template';
 
 @Injectable()
 export class LessonService {
@@ -18,6 +20,9 @@ export class LessonService {
 
   @InjectRepository(UserEntity)
   private readonly userRepository: Repository<UserEntity>;
+
+  @Inject(OpenAiService)
+  private readonly openAiService: OpenAiService;
 
   public constructor(@Inject(REQUEST) private request: { user: User }) {}
 
@@ -45,6 +50,12 @@ export class LessonService {
   public async createLesson(data: Lesson): Promise<Lesson> {
     const lesson = this.repository.create(data);
     await this.repository.save(lesson);
+
+    console.log(
+      await this.openAiService.createChatCompletion(
+        new Prompt(lessonPromptTemplate, lesson)
+      )
+    );
 
     return lesson;
   }

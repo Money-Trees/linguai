@@ -1,16 +1,39 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { Lesson, User } from '@naite/types';
-import { IsString } from 'class-validator';
+import {
+  GermanTopics,
+  Language,
+  Lesson,
+  TaskType,
+  Topic,
+  User,
+} from '@naite/types';
+import { IsEnum, IsString, IsUUID } from 'class-validator';
 import { DocumentDto } from '../../database/document.dto';
-import { Column } from 'typeorm';
 
 export class LessonDto extends DocumentDto implements Lesson {
   @IsString()
   @ApiProperty({ example: 'My Lesson!' })
   public name: string;
 
-  @Column({ type: 'uuid' })
+  @IsUUID()
+  @ApiProperty({ format: 'uuid' })
   public userId!: User['id'];
+
+  @IsEnum(Language)
+  @ApiProperty({
+    example: TaskType.Cloze,
+  })
+  public language: Language;
+
+  @IsString()
+  @ApiProperty({ example: 'My Theme!' })
+  public theme: string;
+
+  @IsString()
+  @ApiProperty({
+    example: GermanTopics.Articles,
+  })
+  public topic: Topic;
 }
 
 export class UpdateLessonDto extends PartialType(LessonDto) {}

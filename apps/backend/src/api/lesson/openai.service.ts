@@ -1,10 +1,11 @@
 import { Prompt } from '@naite/types';
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Configuration, OpenAIApi } from 'openai';
 import { env } from '../../env';
+import { logger } from 'nx/src/utils/logger';
 
 @Injectable()
-export class LessonService {
+export class OpenAiService {
   private configuration = new Configuration({
     apiKey: env.OPENAI_API_KEY,
     organization: env.OPENAI_ORG_ID,
@@ -14,10 +15,7 @@ export class LessonService {
 
   private defaultOptions = { model: 'gpt-3.5-turbo', temperature: 0.7 };
 
-  public createChatCompletion = async <T>(
-    prompt: Prompt<T>,
-    logger: Logger
-  ): Promise<any> => {
+  public createChatCompletion = async <T>(prompt: Prompt<T>): Promise<any> => {
     const response = await this.openai.createChatCompletion({
       ...this.defaultOptions,
       messages: [{ role: 'user' as const, content: prompt.render() }],

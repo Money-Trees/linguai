@@ -1,4 +1,5 @@
-import { FrenchTopic, GermanTopic, Role, TaskType } from './enums';
+import { Language, Role, TaskType } from './enums';
+import { Topic } from './types';
 
 export interface ResponseError {
   statusCode: number;
@@ -28,8 +29,9 @@ export interface User extends Document {
 export interface Lesson extends Document {
   name: string;
   userId: string;
+  language: Language;
   theme: string;
-  topic: GermanTopic | FrenchTopic;
+  topic: Topic;
 }
 
 export interface Task extends Document {
@@ -37,10 +39,4 @@ export interface Task extends Document {
   answer: string;
   type: TaskType;
   lessonId: string;
-}
-
-export interface LessonConfig {
-  language: string;
-  topic: string;
-  verbForms: string[];
 }

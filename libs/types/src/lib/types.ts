@@ -1,5 +1,5 @@
 import { Profile } from 'passport-google-oauth20';
-import { FrenchTopic, GermanTopic } from './enums';
+import { FrenchTopics, GermanTopics } from './enums';
 
 export type GoogleUser = Profile['_json'] & {
   accessToken: string;
@@ -14,10 +14,10 @@ export type PromptTemplate<T> = {
 };
 
 export class Prompt<T> {
-  private constructor(public template: PromptTemplate<T>, public params: T) {}
+  public constructor(public template: PromptTemplate<T>, public params: T) {}
   public render(): string {
     return this.template.render(this.params);
   }
 }
 
-export type Topic = GermanTopic | FrenchTopic;
+export type Topic = GermanTopics | FrenchTopics;
