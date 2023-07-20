@@ -18,7 +18,7 @@ import {
 interface Props {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: FormEventHandler;
+  onSubmit: () => void;
   title: string;
   confirmText: string;
   isLoading?: boolean;
@@ -35,6 +35,11 @@ const ModalContainer = ({
 }: PropsWithChildren<Props>): ReactElement => {
   const initialFocusRef = useRef(null);
 
+  const handleSubmit: FormEventHandler = (event) => {
+    event.preventDefault();
+    onSubmit();
+  };
+
   return (
     <Drawer
       isOpen={isOpen}
@@ -44,7 +49,7 @@ const ModalContainer = ({
       size="full"
     >
       <DrawerOverlay />
-      <DrawerContent ref={initialFocusRef} as="form" onSubmit={onSubmit}>
+      <DrawerContent ref={initialFocusRef} as="form" onSubmit={handleSubmit}>
         <DrawerCloseButton />
         <DrawerHeader>{title}</DrawerHeader>
         <DrawerBody

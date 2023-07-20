@@ -1,4 +1,4 @@
-import { ReactElement, useState } from 'react';
+import { ReactElement, useEffect } from 'react';
 import {
   Box,
   FormControl,
@@ -18,10 +18,15 @@ import {
 import SelectInput from '../Inputs/SelectInput';
 
 interface Props {
-  language: Language;
+  lessonData: Partial<Lesson>;
+  onChange: (key: keyof Lesson, value: unknown) => void;
 }
 
-const getTopics = (language: Language): Topic[] => {
+const getTopics = (language?: Language): Topic[] => {
+  if (!language) {
+    return Object.values(GermanTopic);
+  }
+
   switch (language) {
     case Language.French:
       return Object.values(FrenchTopic);
@@ -31,21 +36,18 @@ const getTopics = (language: Language): Topic[] => {
   }
 };
 
-const LessonForm = ({ language }: Props): ReactElement => {
-  const [lessonData, setLessonData] = useState<Partial<Lesson>>({ language });
+const LessonForm = ({ lessonData, onChange }: Props): ReactElement => {
+  useEffect(() => {
+    onChange('topic', getTopics(lessonData.language)[0]);
+  }, [lessonData.language, onChange]);
 
   return (
     <VStack gap="16px" alignItems="flex-start">
       <FormControl isRequired>
         <FormLabel>Name</FormLabel>
         <Input
-          value={lessonData.theme}
-          onChange={(event) =>
-            setLessonData((prevState) => ({
-              ...prevState,
-              name: event.target.value,
-            }))
-          }
+          value={lessonData.name}
+          onChange={(event) => onChange('name', event.target.value)}
         />
       </FormControl>
       <Box>
@@ -55,24 +57,14 @@ const LessonForm = ({ language }: Props): ReactElement => {
           <Text fontSize={12}>e.g. Work, Travel, Hobbies...</Text>
           <Input
             value={lessonData.theme}
-            onChange={(event) =>
-              setLessonData((prevState) => ({
-                ...prevState,
-                theme: event.target.value,
-              }))
-            }
+            onChange={(event) => onChange('theme', event.target.value)}
           />
         </FormControl>
         <SelectInput
-          options={getTopics(language)}
-          value={lessonData.topic as string}
           label="Grammar concept"
-          onChange={(value) =>
-            setLessonData((prevState) => ({
-              ...prevState,
-              topic: value as Topic,
-            }))
-          }
+          options={getTopics(lessonData.language)}
+          value={lessonData.topic as string}
+          onChange={(value) => onChange('topic', value)}
           getOptionLabel={(option) => option}
         />
       </Box>
