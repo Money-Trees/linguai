@@ -1,4 +1,4 @@
-import { ReactElement, useEffect } from 'react';
+import { ReactElement } from 'react';
 import {
   Box,
   FormControl,
@@ -37,10 +37,6 @@ const getTopics = (language?: Language): Topic[] => {
 };
 
 const LessonForm = ({ lessonData, onChange }: Props): ReactElement => {
-  useEffect(() => {
-    onChange('topic', getTopics(lessonData.language)[0]);
-  }, [lessonData.language, onChange]);
-
   return (
     <VStack gap="16px" alignItems="flex-start">
       <FormControl isRequired>

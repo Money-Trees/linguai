@@ -1,7 +1,6 @@
 import { Role } from '@naite/types';
-import { AiFillHome } from 'react-icons/ai';
-import { IconType } from 'react-icons/lib';
 import HomePage from './pages/home';
+import Lesson from './pages/lesson';
 
 interface PageRoute {
   path: `/${string}`;
@@ -10,22 +9,19 @@ interface PageRoute {
   restrictions?: Role[];
 }
 
-interface NavigationRoute extends PageRoute {
-  icon: IconType;
-}
-
-export const navigationRoutes: NavigationRoute[] = [
+export const navigationRoutes: PageRoute[] = [
   {
     component: <HomePage />,
-    icon: AiFillHome,
     label: 'Home',
     path: '/',
+  },
+  {
+    component: <Lesson />,
+    label: 'Lesson',
+    path: '/lesson/:id',
   },
 ];
 
 export const pageRoutes: PageRoute[] = [];
 
-export const routes: (PageRoute | NavigationRoute)[] = [
-  ...navigationRoutes,
-  ...pageRoutes,
-];
+export const routes: PageRoute[] = [...navigationRoutes, ...pageRoutes];

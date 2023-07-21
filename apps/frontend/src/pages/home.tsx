@@ -24,11 +24,7 @@ const HomePage = (): ReactElement => {
         <Button width="full" onClick={onOpen}>
           Add new Lesson
         </Button>
-        <LessonsWidget
-          title="Your Lessons"
-          lessons={lessons}
-          onStartLesson={() => null}
-        />
+        <LessonsWidget title="Your Lessons" lessons={lessons} />
       </VStack>
       <LessonOverlay isOpen={isOpen} onClose={onClose} language={language} />
     </Card>

@@ -22,7 +22,8 @@ const SelectInput = <T,>({
   return (
     <FormControl>
       <FormLabel>{label}</FormLabel>
-      <Select value={value} onChange={(e) => onChange(e.target.value)}>
+      <Select value={value || ''} onChange={(e) => onChange(e.target.value)}>
+        <option value="" />
         {options.map((option) => {
           const value = getOptionValue
             ? getOptionValue(option)

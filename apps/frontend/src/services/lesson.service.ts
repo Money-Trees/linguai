@@ -12,6 +12,13 @@ import { useNotification } from '../hooks/useNotification';
 export const useLessons = <T extends Lesson[]>(): UseQueryResult<Lesson[]> =>
   useQuery(['lessons'], () => request<T>('/lessons'));
 
+export const useLesson = <T extends Lesson>(
+  id?: string
+): UseQueryResult<Lesson> =>
+  useQuery(['lessons', id], () => request<T>(`/lessons/${id}`), {
+    enabled: !!id,
+  });
+
 export const useAddLesson = (): UseMutationResult<
   Lesson,
   RequestError,

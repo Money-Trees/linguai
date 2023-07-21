@@ -1,6 +1,6 @@
 import {
+  Box,
   CircularProgress,
-  Grid,
   ListItem,
   UnorderedList,
   VStack,
@@ -12,7 +12,6 @@ import isArray from 'lodash/isArray';
 import { Route, Routes } from 'react-router-dom';
 import DevBanner, { BANNER_HEIGHT } from './components/DevBanner';
 import Navbar from './components/Navigation/Navbar';
-import { SIDEBAR_WIDTH } from './components/Navigation/Sidebar';
 import { env } from './env';
 import { useNotification } from './hooks/useNotification';
 import LoginPage from './pages/login';
@@ -21,8 +20,9 @@ import { routes } from './routes';
 import { getErrorMessage } from './services/api.service';
 import { useAuthStatus } from './services/auth.service';
 import { useAuthUser } from './services/user.service';
+import { ReactElement } from 'react';
 
-const App = (): JSX.Element => {
+const App = (): ReactElement => {
   const queryClient = useQueryClient();
   queryClient.setDefaultOptions({
     queries: {
@@ -58,10 +58,10 @@ const App = (): JSX.Element => {
 
   if (isLoading) {
     return (
-      <Grid width="100vw" height={height} placeItems="center">
+      <Box width="100vw" height={height} placeItems="center">
         {env.IS_DEV && <DevBanner />}
         <CircularProgress isIndeterminate value={80} />
-      </Grid>
+      </Box>
     );
   }
 
@@ -72,14 +72,13 @@ const App = (): JSX.Element => {
   return (
     <>
       {env.IS_DEV && <DevBanner />}
-      <Grid
-        gridTemplateColumns={{ md: `${SIDEBAR_WIDTH} 1fr` }}
+      <Box
         width="100vw"
-        height={height}
         backgroundColor="gray.100"
         _dark={{ backgroundColor: 'gray.900' }}
+        paddingBottom={8}
       >
-        <VStack gap={4} width="100vw">
+        <VStack gap={8} width="100vw">
           <Navbar />
           <Routes>
             {routes
@@ -94,7 +93,7 @@ const App = (): JSX.Element => {
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </VStack>
-      </Grid>
+      </Box>
     </>
   );
 };

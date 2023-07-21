@@ -1,4 +1,4 @@
-import { Icon, Link, List, ListItem } from '@chakra-ui/react';
+import { Link, List, ListItem } from '@chakra-ui/react';
 import { Role, User } from '@naite/types';
 import { NavLink } from 'react-router-dom';
 import { navigationRoutes } from '../../routes';
@@ -16,7 +16,7 @@ const SidebarLinks = ({ onClose, user }: SidebarLinksProps): JSX.Element => (
           !restrictions?.length ||
           restrictions.includes(user?.role || Role.User)
       )
-      .map(({ path, label, icon }) => (
+      .map(({ path, label }) => (
         <ListItem key={`sidebar-${path}`} display="flex">
           <Link
             _activeLink={{
@@ -53,7 +53,6 @@ const SidebarLinks = ({ onClose, user }: SidebarLinksProps): JSX.Element => (
             gap="4"
             onClick={onClose}
           >
-            <Icon as={icon} boxSize="1.2em" />
             {label}
           </Link>
         </ListItem>
