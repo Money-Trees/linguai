@@ -7,11 +7,10 @@ import { Task } from '@naite/types';
 
 const Lesson = (): ReactElement => {
   const { id } = useParams();
-  const { data: lesson } = useLesson(id);
+  const { data: lesson } = useLesson(id, { select: 'task' });
   const [currentTask, setCurrentTask] = useState<Task>();
 
   useEffect(() => {
-    console.log(lesson);
 
     if (lesson?.tasks?.length) {
       setCurrentTask(lesson.tasks.find((task) => !task.isCompleted));

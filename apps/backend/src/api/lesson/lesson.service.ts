@@ -31,16 +31,7 @@ export class LessonService {
   public constructor(@Inject(REQUEST) private request: { user: User }) {}
 
   public async getLessons(relations?: string[]): Promise<Lesson[]> {
-    return this.repository.find({ relations });
-  }
-
-  public async getLessonsByUserId(
-    userId: string,
-    relations?: string[]
-  ): Promise<Lesson[]> {
-    if (!this.hasAccessToLesson({ userId } as Lesson)) {
-      throw new ForbiddenException();
-    }
+    const userId = this.request.user.id;
 
     return this.repository.find({ relations, where: { userId } });
   }
@@ -49,7 +40,10 @@ export class LessonService {
     id: string,
     relations?: string[]
   ): Promise<Lesson> {
-    const lesson = await this.repository.findOne({ where: { id }, relations });
+    const lesson = await this.repository.findOne({
+      where: { id },
+      relations,
+    });
 
     if (!lesson) {
       throw new NotFoundException([`Lesson with id ${id} not found`]);
@@ -77,7 +71,7 @@ export class LessonService {
         const match = line.match(/(\[.*?\])/);
 
         if (match) {
-          const modelAnswer = match[0].replace(/\[|\]/g, '').trim();
+          const modelAnswer = match[0].replace(/[\\[\]]/g, '').trim();
           const question = line
             .replace(match[0], match[0].trim())
             .replace(/^\d+\.\s/, '');

@@ -8,7 +8,7 @@ import { logger } from 'nx/src/utils/logger';
 export class OpenAiService {
   private openai: OpenAIApi;
 
-  private defaultOptions = { model: 'gpt-4', temperature: 0.7 };
+  private defaultOptions = { model: 'gpt-3.5-turbo', temperature: 0.7 };
 
   public constructor() {
     const configuration = new Configuration({

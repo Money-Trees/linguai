@@ -9,13 +9,20 @@ import { Lesson, RequestBody } from '@naite/types';
 import request, { RequestError } from './api.service';
 import { useNotification } from '../hooks/useNotification';
 
+type LessonSelect = 'task';
+
+interface LessonParams {
+  select: LessonSelect;
+}
+
 export const useLessons = <T extends Lesson[]>(): UseQueryResult<Lesson[]> =>
-  useQuery(['lessons'], () => request<T>('/lessons'));
+  useQuery(['lessons'], () => request<T>(`/lessons`));
 
 export const useLesson = <T extends Lesson>(
-  id?: string
+  id?: string,
+  params?: LessonParams
 ): UseQueryResult<Lesson> =>
-  useQuery(['lessons', id], () => request<T>(`/lessons/${id}`), {
+  useQuery(['lessons', id], () => request<T>(`/lessons/${id}`, { params }), {
     enabled: !!id,
   });
 

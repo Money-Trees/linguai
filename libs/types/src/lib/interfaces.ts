@@ -41,4 +41,5 @@ export interface Task extends Document {
   isCompleted?: boolean;
   type: TaskType;
   lessonId: string;
+  lesson?: Lesson;
 }
