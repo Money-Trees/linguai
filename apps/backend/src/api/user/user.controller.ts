@@ -32,8 +32,12 @@ export class UserController {
   public constructor(private readonly userService: UserService) {}
 
   @Get()
-  @ApiOperation({ summary: 'Get all users' })
+  @ApiOperation({
+    summary: 'Get all users',
+    description: 'Access only Admin or the user itself',
+  })
   @ApiOkResponse({ type: UserDto, isArray: true })
+  @Roles(Role.Admin)
   @ApiQuery({
     name: 'select',
     required: false,
@@ -51,7 +55,10 @@ export class UserController {
 
   @Post()
   @Roles(Role.Admin)
-  @ApiOperation({ summary: 'Create a user' })
+  @ApiOperation({
+    summary: 'Create a user',
+    description: 'Access only by Admin',
+  })
   @ApiCreatedResponse({ type: UserDto })
   @ApiBadRequestResponse({ type: ErrorDto })
   public async createUser(@Body() body: UserDto): Promise<User> {
@@ -60,7 +67,10 @@ export class UserController {
 
   @Delete(':id')
   @Roles(Role.Admin)
-  @ApiOperation({ summary: 'Delete a user by id' })
+  @ApiOperation({
+    summary: 'Delete a user by id',
+    description: 'Access only by Admin',
+  })
   @ApiOkResponse({ type: DeleteResult })
   @ApiNotFoundResponse({ type: ErrorDto })
   public async deleteUserById(
@@ -70,7 +80,10 @@ export class UserController {
   }
 
   @Get(':id')
-  @ApiOperation({ summary: 'Get a user by id' })
+  @ApiOperation({
+    summary: 'Get a user by id',
+    description: 'Access only by Admin or the user itself',
+  })
   @ApiOkResponse({ type: UserDto })
   @ApiNotFoundResponse({ type: ErrorDto })
   @ApiQuery({
@@ -90,8 +103,10 @@ export class UserController {
   }
 
   @Patch(':id')
-  @Roles(Role.Admin)
-  @ApiOperation({ summary: 'Update a user by id' })
+  @ApiOperation({
+    summary: 'Update a user by id',
+    description: 'Access only by Admin or the user itself',
+  })
   @ApiOkResponse({ type: UserDto })
   @ApiBadRequestResponse({ type: ErrorDto })
   @ApiNotFoundResponse({ type: ErrorDto })

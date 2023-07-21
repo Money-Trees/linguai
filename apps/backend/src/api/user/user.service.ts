@@ -18,9 +18,7 @@ export class UserService {
   public constructor(@Inject(REQUEST) private request: { user: User }) {}
 
   public async getUsers(relations?: string[]): Promise<User[]> {
-    const allUsers = await this.repository.find({ relations });
-
-    return allUsers;
+    return this.repository.find({ relations });
   }
 
   public async getUserById(id: string, relations?: string[]): Promise<User> {
@@ -59,6 +57,10 @@ export class UserService {
 
     if (!userToUpdate) {
       throw new NotFoundException([`User with id ${id} not found`]);
+    }
+
+    if (!this.hasAccessToUser(userToUpdate)) {
+      throw new ForbiddenException();
     }
 
     await this.repository.update(id, data);

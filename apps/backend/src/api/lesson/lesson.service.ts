@@ -34,6 +34,17 @@ export class LessonService {
     return this.repository.find({ relations });
   }
 
+  public async getLessonsByUserId(
+    userId: string,
+    relations?: string[]
+  ): Promise<Lesson[]> {
+    if (!this.hasAccessToLesson({ userId } as Lesson)) {
+      throw new ForbiddenException();
+    }
+
+    return this.repository.find({ relations, where: { userId } });
+  }
+
   public async getLessonById(
     id: string,
     relations?: string[]

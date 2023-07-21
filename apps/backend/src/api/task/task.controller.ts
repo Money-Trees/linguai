@@ -23,7 +23,7 @@ import { Role, Task } from '@naite/types';
 import { DeleteResult } from 'typeorm';
 import { ErrorDto } from '../../app/error.dto';
 import { Roles } from '../auth/roles.decorator';
-import { UpdateTaskDto, TaskDto } from './task.dto';
+import { TaskDto, UpdateTaskDto } from './task.dto';
 import { TaskService } from './task.service';
 
 @ApiTags('tasks')
@@ -32,7 +32,11 @@ export class TaskController {
   public constructor(private readonly taskService: TaskService) {}
 
   @Get()
-  @ApiOperation({ summary: 'Get all tasks' })
+  @Roles(Role.Admin)
+  @ApiOperation({
+    summary: 'Get all tasks',
+    description: 'Access only by admin',
+  })
   @ApiOkResponse({ type: TaskDto, isArray: true })
   @ApiQuery({
     name: 'select',
@@ -51,7 +55,10 @@ export class TaskController {
 
   @Post()
   @Roles(Role.Admin)
-  @ApiOperation({ summary: 'Create a lesson' })
+  @ApiOperation({
+    summary: 'Create a task',
+    description: 'Access only by admin',
+  })
   @ApiCreatedResponse({ type: TaskDto })
   @ApiBadRequestResponse({ type: ErrorDto })
   public async createTask(@Body() body: TaskDto): Promise<Task> {
@@ -60,7 +67,10 @@ export class TaskController {
 
   @Delete(':id')
   @Roles(Role.Admin)
-  @ApiOperation({ summary: 'Delete a lesson by id' })
+  @ApiOperation({
+    summary: 'Delete a task by id',
+    description: 'Access only by admin',
+  })
   @ApiOkResponse({ type: DeleteResult })
   @ApiNotFoundResponse({ type: ErrorDto })
   public async deleteTaskById(
@@ -70,7 +80,7 @@ export class TaskController {
   }
 
   @Get(':id')
-  @ApiOperation({ summary: 'Get a lesson by id' })
+  @ApiOperation({ summary: 'Get a task by id' })
   @ApiOkResponse({ type: TaskDto })
   @ApiNotFoundResponse({ type: ErrorDto })
   @ApiQuery({
@@ -91,7 +101,10 @@ export class TaskController {
 
   @Patch(':id')
   @Roles(Role.Admin)
-  @ApiOperation({ summary: 'Update a lesson by id' })
+  @ApiOperation({
+    summary: 'Update a task by id',
+    description: 'Access only by admin',
+  })
   @ApiOkResponse({ type: TaskDto })
   @ApiBadRequestResponse({ type: ErrorDto })
   @ApiNotFoundResponse({ type: ErrorDto })

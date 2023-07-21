@@ -19,11 +19,12 @@ import {
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
-import { Lesson } from '@naite/types';
+import { Lesson, Role } from '@naite/types';
 import { DeleteResult } from 'typeorm';
 import { ErrorDto } from '../../app/error.dto';
 import { UpdateLessonDto, LessonDto } from './lesson.dto';
 import { LessonService } from './lesson.service';
+import { Roles } from '../auth/roles.decorator';
 
 @ApiTags('lessons')
 @Controller('lessons')
@@ -31,7 +32,11 @@ export class LessonController {
   public constructor(private readonly lessonService: LessonService) {}
 
   @Get()
-  @ApiOperation({ summary: 'Get all lessons' })
+  @Roles(Role.Admin)
+  @ApiOperation({
+    summary: 'Get all lessons',
+    description: 'Access only by Admin',
+  })
   @ApiOkResponse({ type: LessonDto, isArray: true })
   @ApiQuery({
     name: 'select',
@@ -48,8 +53,30 @@ export class LessonController {
     return this.lessonService.getLessons(select);
   }
 
+  @Get(':userId')
+  @ApiOperation({
+    summary: 'Get all lessons by userId',
+    description: 'Access only by Admin or the user itself',
+  })
+  @ApiOkResponse({ type: LessonDto, isArray: true })
+  @ApiQuery({
+    name: 'select',
+    required: false,
+    description: 'Return related objects',
+  })
+  public async getLessonsByUserId(
+    @Param('userId', ParseUUIDPipe) userId: string,
+    @Query(
+      'select',
+      new ParseArrayPipe({ items: String, separator: ',', optional: true })
+    )
+    select?: string[]
+  ): Promise<Lesson[]> {
+    return this.lessonService.getLessonsByUserId(userId, select);
+  }
+
   @Post()
-  @ApiOperation({ summary: 'Create a task' })
+  @ApiOperation({ summary: 'Create a lesson' })
   @ApiCreatedResponse({ type: LessonDto })
   @ApiBadRequestResponse({ type: ErrorDto })
   public async createLesson(@Body() body: LessonDto): Promise<Lesson> {
@@ -57,7 +84,7 @@ export class LessonController {
   }
 
   @Delete(':id')
-  @ApiOperation({ summary: 'Delete a task by id' })
+  @ApiOperation({ summary: 'Delete a lesson by id' })
   @ApiOkResponse({ type: DeleteResult })
   @ApiNotFoundResponse({ type: ErrorDto })
   public async deleteLessonById(
@@ -67,7 +94,7 @@ export class LessonController {
   }
 
   @Get(':id')
-  @ApiOperation({ summary: 'Get a task by id' })
+  @ApiOperation({ summary: 'Get a lesson by id' })
   @ApiOkResponse({ type: LessonDto })
   @ApiNotFoundResponse({ type: ErrorDto })
   @ApiQuery({
@@ -87,7 +114,7 @@ export class LessonController {
   }
 
   @Patch(':id')
-  @ApiOperation({ summary: 'Update a task by id' })
+  @ApiOperation({ summary: 'Update a lesson by id' })
   @ApiOkResponse({ type: LessonDto })
   @ApiBadRequestResponse({ type: ErrorDto })
   @ApiNotFoundResponse({ type: ErrorDto })
