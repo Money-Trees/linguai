@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useLesson } from '../services/lesson.service';
 import ClozeTestTask from '../components/Task/ClozeTestTask';
 import { Task } from '@naite/types';
+import TaskDescription from '../components/Task/TaskDescription';
 
 const Lesson = (): ReactElement => {
   const { id } = useParams();
@@ -37,8 +38,12 @@ const Lesson = (): ReactElement => {
             borderRadius: '10px',
           }}
         />
-        {currentTask && (
+        {lesson && currentTask && (
           <>
+            <TaskDescription
+              taskType={currentTask.type}
+              lessonTopic={lesson?.topic}
+            />
             <ClozeTestTask question={currentTask.question} />
             <Card
               backgroundColor="gray.300"
