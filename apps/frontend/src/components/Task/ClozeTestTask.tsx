@@ -7,7 +7,7 @@ interface Props {
 
 const ClozeTestTask = ({ question }: Props): ReactElement => {
   const [inputValue, setInputValue] = useState<string>('');
-  const regex = /\[.*?\]/;
+  const regex = /\[.*?]/;
   const tokens = question.split(/\s+/); // Tokenize by space (word boundaries)
 
   return (
@@ -24,14 +24,24 @@ const ClozeTestTask = ({ question }: Props): ReactElement => {
           if (token.match(regex)) {
             return (
               <Input
+                isRequired
                 key={index}
                 type="text"
                 value={inputValue}
-                variant={'filled'}
-                colorScheme={'primary'}
+                variant="filled"
+                bg="gray.400"
+                fontWeight="bold"
+                fontSize="18px"
+                _dark={{
+                  backgroundColor: 'gray.600',
+                }}
+                _hover={{
+                  filter: 'brightness(0.8)',
+                }}
                 onChange={(e) => setInputValue(e.target.value)}
                 size="sm"
-                width={`${token.length * 8}px`} // Roughly set the width based on the word's length
+                borderRadius="4px"
+                width={`${Math.max(token.length, inputValue.length) * 12}px`} // Roughly set the width based on the word's length
                 lineHeight="normal"
               />
             );
@@ -39,13 +49,6 @@ const ClozeTestTask = ({ question }: Props): ReactElement => {
             return <Text key={index}>{token}</Text>;
           }
         })}
-        <Text>Holla</Text>
-        <Text>Holla</Text>
-        <Text>Holla</Text>
-        <Text>Holla</Text>
-        <Text>Holla</Text>
-        <Text>Holla</Text>
-        <Text>Holla</Text>
       </HStack>
     </Card>
   );
