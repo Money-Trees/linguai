@@ -1,11 +1,11 @@
 import { ReactElement, useEffect, useState } from 'react';
-import { Button, Card, HStack, VStack, Text } from '@chakra-ui/react';
+import { Button, Card, HStack, VStack, Progress } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 import { useLesson } from '../services/lesson.service';
 import ClozeTestTask from '../components/Task/ClozeTestTask';
 import TaskDescription from '../components/Task/TaskDescription';
 import { useUpdateTask } from '../services/task.service';
-import ProgressBar from '../components/ProgressBar';
+import TaskQuestionTranslation from '../components/Task/TaskQuestionTranslation';
 import { Task } from '@naite/types';
 
 type TaskStatus = 'correct' | 'incorrect' | 'unanswered';
@@ -57,7 +57,16 @@ const Lesson = (): ReactElement => {
 
   return (
     <Card width="80%" p={8}>
-      <ProgressBar completed={completePercentage} />
+      <Progress
+        borderRadius={'md'}
+        value={completePercentage}
+        isAnimated={true}
+        sx={{
+          '& > div:first-child': {
+            transitionProperty: 'width',
+          },
+        }}
+      />
       <VStack marginTop="32px">
         {lesson && currentTask && (
           <>
@@ -69,19 +78,7 @@ const Lesson = (): ReactElement => {
               question={currentTask.question}
               onInputValuesChange={handleInputValuesChange}
             />
-            <Card
-              padding="4"
-              backgroundColor="gray.300"
-              _dark={{
-                backgroundColor: 'gray.800',
-              }}
-              width="100%"
-            >
-              <HStack>
-                <Text as="b">Translation:</Text>
-                <Text> {currentTask.translation}</Text>
-              </HStack>
-            </Card>
+            <TaskQuestionTranslation translation={currentTask.translation} />
             {taskStatus === 'unanswered' && (
               <HStack width="100%" justifyContent="flex-end">
                 <Button isDisabled={!answer} onClick={() => answerTask()}>
