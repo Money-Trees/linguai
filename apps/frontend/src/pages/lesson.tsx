@@ -28,7 +28,7 @@ const Lesson = (): ReactElement => {
       const percentage = (completedCount / lesson.tasks.length) * 100;
       setCompletePercentage(percentage);
     }
-  }, [currentTask, lesson.tasks]);
+  }, [currentTask, lesson?.tasks]);
 
   return (
     <Card width="80%" p={8}>
