@@ -66,11 +66,7 @@ export class TaskController {
   }
 
   @Delete(':id')
-  @Roles(Role.Admin)
-  @ApiOperation({
-    summary: 'Delete a task by id',
-    description: 'Access only by admin',
-  })
+  @ApiOperation({ summary: 'Delete a task by id' })
   @ApiOkResponse({ type: DeleteResult })
   @ApiNotFoundResponse({ type: ErrorDto })
   public async deleteTaskById(
@@ -100,11 +96,7 @@ export class TaskController {
   }
 
   @Patch(':id')
-  @Roles(Role.Admin)
-  @ApiOperation({
-    summary: 'Update a task by id',
-    description: 'Access only by admin',
-  })
+  @ApiOperation({ summary: 'Update a task by id' })
   @ApiOkResponse({ type: TaskDto })
   @ApiBadRequestResponse({ type: ErrorDto })
   @ApiNotFoundResponse({ type: ErrorDto })
