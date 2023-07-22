@@ -10,12 +10,25 @@ const Lesson = (): ReactElement => {
   const { id } = useParams();
   const { data: lesson } = useLesson(id, { select: 'tasks' });
   const [currentTask, setCurrentTask] = useState<Task>();
+  const [completePercentage, setCompletePercentage] = useState<number>(0);
 
   useEffect(() => {
     if (lesson?.tasks?.length) {
       setCurrentTask(lesson.tasks.find((task) => !task.isCompleted));
     }
   }, [lesson]);
+
+  useEffect(() => {
+    if (lesson?.tasks?.length) {
+      const completedCount = lesson.tasks.reduce(
+        (prev, task) => (task.isCompleted ? prev + 1 : prev),
+        0
+      );
+
+      const percentage = (completedCount / lesson.tasks.length) * 100;
+      setCompletePercentage(percentage);
+    }
+  }, [currentTask, lesson.tasks]);
 
   return (
     <Card width="80%" p={8}>
@@ -32,7 +45,7 @@ const Lesson = (): ReactElement => {
           _before={{
             content: `""`,
             position: 'absolute',
-            width: '25%',
+            width: `${completePercentage}%`,
             height: '16px',
             bg: 'primary.500',
             borderRadius: '10px',
