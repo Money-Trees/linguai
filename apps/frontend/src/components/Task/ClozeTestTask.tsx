@@ -18,6 +18,7 @@ const ClozeTestTask = ({ question }: Props): ReactElement => {
       }}
       padding="4"
       whiteSpace="pre-wrap"
+      width="100%"
     >
       <HStack wrap={'wrap'}>
         {tokens.map((token, index) => {
