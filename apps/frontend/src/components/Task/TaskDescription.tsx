@@ -21,7 +21,7 @@ const TaskDescription = ({
   };
 
   return (
-    <Box padding="4" whiteSpace="pre-wrap" width="100%">
+    <Box paddingY="4" whiteSpace="pre-wrap" width="100%">
       <Heading size="md">{getDescription()}</Heading>
     </Box>
   );

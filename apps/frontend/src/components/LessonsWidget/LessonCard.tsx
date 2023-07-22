@@ -1,5 +1,7 @@
 import { Lesson } from '@naite/types';
 import {
+  Badge,
+  Box,
   Button,
   Card,
   CardBody,
@@ -7,12 +9,27 @@ import {
   CardHeader,
   Heading,
   Text,
+  VStack,
 } from '@chakra-ui/react';
 import { ReactElement } from 'react';
 import { useNavigate } from 'react-router-dom';
+import ProgressBar from '../ProgressBar';
 
 const LessonCard = ({ lesson }: { lesson: Lesson }): ReactElement => {
   const navigate = useNavigate();
+
+  const getCompletedPercentage = (): number => {
+    if (!lesson.tasks) {
+      return 0;
+    }
+
+    const completedCount = lesson.tasks.reduce(
+      (prev, task) => (task.isCompleted ? prev + 1 : prev),
+      0
+    );
+
+    return (completedCount / lesson.tasks.length) * 100;
+  };
 
   return (
     <Card
@@ -22,13 +39,22 @@ const LessonCard = ({ lesson }: { lesson: Lesson }): ReactElement => {
       }}
     >
       <CardHeader>
-        <Heading size="md">{lesson.name}</Heading>
+        <Heading title={lesson.name} size="md" noOfLines={1} maxWidth="full">
+          {lesson.name}
+        </Heading>
       </CardHeader>
       <CardBody>
-        <Text>Theme: </Text>
-        <Text as="b">{lesson.theme}</Text>
-        <Text>Grammar concept: </Text>
-        <Text as="b">{lesson.topic}</Text>
+        <VStack alignItems="flex-start" gap={4}>
+          <ProgressBar completed={getCompletedPercentage()} />
+          <Box>
+            <Text>Theme: </Text>
+            <Badge>{lesson.theme}</Badge>
+          </Box>
+          <Box>
+            <Text>Grammar concept: </Text>
+            <Badge>{lesson.topic}</Badge>
+          </Box>
+        </VStack>
       </CardBody>
       <CardFooter>
         <Button onClick={() => navigate(`/lesson/${lesson.id}`)}>

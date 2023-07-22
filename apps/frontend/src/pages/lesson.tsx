@@ -1,11 +1,12 @@
 import { ReactElement, useEffect, useState } from 'react';
-import { Box, Button, Card, HStack, VStack } from '@chakra-ui/react';
+import { Button, Card, HStack, VStack, Text } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 import { useLesson } from '../services/lesson.service';
 import ClozeTestTask from '../components/Task/ClozeTestTask';
 import { Task } from '@naite/types';
 import TaskDescription from '../components/Task/TaskDescription';
 import { useUpdateTask } from '../services/task.service';
+import ProgressBar from '../components/ProgressBar';
 
 const Lesson = (): ReactElement => {
   const { id } = useParams();
@@ -34,24 +35,7 @@ const Lesson = (): ReactElement => {
 
   return (
     <Card width="80%" p={8}>
-      <Box
-        as="span"
-        marginRight="auto"
-        bg="gray.400"
-        width="100%"
-        height="20px"
-        borderRadius="10px"
-        borderWidth="2px"
-        borderColor="gray.400"
-        _before={{
-          content: `""`,
-          position: 'absolute',
-          width: `${completePercentage}%`,
-          height: '16px',
-          bg: 'primary.500',
-          borderRadius: '10px',
-        }}
-      />
+      <ProgressBar completed={completePercentage} />
       <VStack marginTop="32px">
         {lesson && currentTask && (
           <>
@@ -61,12 +45,17 @@ const Lesson = (): ReactElement => {
             />
             <ClozeTestTask question={currentTask.question} />
             <Card
+              padding="4"
               backgroundColor="gray.300"
               _dark={{
                 backgroundColor: 'gray.800',
               }}
+              width="100%"
             >
-              {currentTask.translation}
+              <HStack>
+                <Text as="b">Translation:</Text>
+                <Text> {currentTask.translation}</Text>
+              </HStack>
             </Card>
             <HStack width="100%" justifyContent="flex-end">
               <Button>Check answer</Button>
