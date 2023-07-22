@@ -1,7 +1,7 @@
 import { Button, Card, useDisclosure, VStack } from '@chakra-ui/react';
-import { ReactElement, useState } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
 import SelectInput from '../components/Inputs/SelectInput';
-import { Language } from '@naite/types';
+import { Language, Lesson } from '@naite/types';
 import LessonsWidget from '../components/LessonsWidget';
 import { useLessons } from '../services/lesson.service';
 import LessonOverlay from '../components/LessonOverlay';
@@ -10,6 +10,16 @@ const HomePage = (): ReactElement => {
   const { data: lessons = [] } = useLessons();
   const [language, setLanguage] = useState(Language.German);
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const [lessonsForCurrentLanguage, setLessonsForCurrentLanguage] = useState<
+    Lesson[]
+  >([]);
+
+  useEffect(() => {
+    setLessonsForCurrentLanguage(
+      lessons.filter((lesson) => language === lesson.language)
+    );
+  }, [language, lessons]);
 
   return (
     <Card width="80%" p={8}>
@@ -24,7 +34,10 @@ const HomePage = (): ReactElement => {
         <Button width="full" onClick={onOpen}>
           Add new Lesson
         </Button>
-        <LessonsWidget title="Your Lessons" lessons={lessons} />
+        <LessonsWidget
+          title="Your Lessons"
+          lessons={lessonsForCurrentLanguage}
+        />
       </VStack>
       <LessonOverlay isOpen={isOpen} onClose={onClose} language={language} />
     </Card>
