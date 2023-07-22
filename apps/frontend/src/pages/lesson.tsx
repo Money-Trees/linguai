@@ -1,12 +1,11 @@
 import { ReactElement, useEffect, useState } from 'react';
-import { Button, Card, HStack, VStack, Text } from '@chakra-ui/react';
+import { Button, Card, HStack, VStack, Text, Progress } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 import { useLesson } from '../services/lesson.service';
 import ClozeTestTask from '../components/Task/ClozeTestTask';
 import { Task } from '@naite/types';
 import TaskDescription from '../components/Task/TaskDescription';
 import { useUpdateTask } from '../services/task.service';
-import ProgressBar from '../components/ProgressBar';
 
 const Lesson = (): ReactElement => {
   const { id } = useParams();
@@ -53,7 +52,16 @@ const Lesson = (): ReactElement => {
 
   return (
     <Card width="80%" p={8}>
-      <ProgressBar completed={completePercentage} />
+      <Progress
+        borderRadius={'md'}
+        value={completePercentage}
+        isAnimated={true}
+        sx={{
+          '& > div:first-child': {
+            transitionProperty: 'width',
+          },
+        }}
+      />
       <VStack marginTop="32px">
         {lesson && currentTask && (
           <>

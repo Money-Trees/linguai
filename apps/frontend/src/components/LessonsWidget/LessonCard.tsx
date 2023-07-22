@@ -10,10 +10,10 @@ import {
   Heading,
   Text,
   VStack,
+  Progress,
 } from '@chakra-ui/react';
 import { ReactElement } from 'react';
 import { useNavigate } from 'react-router-dom';
-import ProgressBar from '../ProgressBar';
 
 const LessonCard = ({ lesson }: { lesson: Lesson }): ReactElement => {
   const navigate = useNavigate();
@@ -45,7 +45,16 @@ const LessonCard = ({ lesson }: { lesson: Lesson }): ReactElement => {
       </CardHeader>
       <CardBody>
         <VStack alignItems="flex-start" gap={4}>
-          <ProgressBar completed={getCompletedPercentage()} />
+          <Progress
+            borderRadius={'md'}
+            value={getCompletedPercentage()}
+            isAnimated={true}
+            sx={{
+              '& > div:first-child': {
+                transitionProperty: 'width',
+              },
+            }}
+          />
           <Box>
             <Text>Theme: </Text>
             <Badge>{lesson.theme}</Badge>
