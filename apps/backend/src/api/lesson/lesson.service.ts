@@ -40,10 +40,7 @@ export class LessonService {
     id: string,
     relations?: string[]
   ): Promise<Lesson> {
-    const lesson = await this.repository.findOne({
-      where: { id },
-      relations,
-    });
+    const lesson = await this.repository.findOne({ where: { id }, relations });
 
     if (!lesson) {
       throw new NotFoundException([`Lesson with id ${id} not found`]);
@@ -57,7 +54,8 @@ export class LessonService {
   }
 
   public async createLesson(data: Lesson): Promise<Lesson> {
-    const lesson = this.repository.create(data);
+    const userId = this.request.user.id;
+    const lesson = this.repository.create({ ...data, userId });
     await this.repository.save(lesson);
 
     const responseString = await this.openAiService.createChatCompletion(
@@ -89,10 +87,16 @@ export class LessonService {
 
     const taskEntities = await this.taskService.createTasks(tasks);
 
+    console.log(responseString);
+    console.log(taskEntities);
+
     return { ...lesson, tasks: taskEntities };
   }
 
   public async deleteLessonById(id: string): Promise<DeleteResult> {
+    // check if lesson exists and user has access
+    await this.getLessonById(id);
+
     const result = await this.repository.delete(id);
 
     if (!result.affected) {
@@ -106,7 +110,7 @@ export class LessonService {
     id: string,
     data: Partial<Lesson>
   ): Promise<Lesson> {
-    const lessonToUpdate = await this.getLessonById(id, ['salaries', 'costs']);
+    const lessonToUpdate = await this.getLessonById(id);
 
     if (!lessonToUpdate) {
       throw new NotFoundException([`Lesson with id ${id} not found`]);

@@ -5,9 +5,6 @@ import { LessonEntity } from '../lesson/lesson.entity';
 
 @Entity('task')
 export class TaskEntity extends DocumentEntity implements Task {
-  @Column({ type: 'uuid' })
-  public lessonId!: Lesson['id'];
-
   @Column()
   public modelAnswer: string;
 
@@ -23,6 +20,11 @@ export class TaskEntity extends DocumentEntity implements Task {
   @Column({ nullable: true })
   public isCompleted?: boolean;
 
-  @ManyToOne(() => LessonEntity, (lessonEntity) => lessonEntity.tasks)
+  @Column({ type: 'uuid' })
+  public lessonId!: Lesson['id'];
+
+  @ManyToOne(() => LessonEntity, (lessonEntity) => lessonEntity.tasks, {
+    cascade: true,
+  })
   public readonly lesson: Lesson;
 }

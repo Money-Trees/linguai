@@ -9,7 +9,7 @@ import { Lesson, RequestBody } from '@naite/types';
 import request, { RequestError } from './api.service';
 import { useNotification } from '../hooks/useNotification';
 
-type LessonSelect = 'task';
+type LessonSelect = 'tasks';
 
 interface LessonParams {
   select: LessonSelect;
