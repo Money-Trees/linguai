@@ -4,7 +4,7 @@ import { routes } from '../routes';
 
 export const useDocumentTitle = (): string => {
   const location = useLocation();
-  const title = 'LinguAi';
+  const title = 'Dialoq';
   const route = routes.find((r) => r.path === location.pathname);
 
   useEffect(() => {

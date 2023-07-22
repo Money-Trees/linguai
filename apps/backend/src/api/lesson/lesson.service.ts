@@ -66,31 +66,7 @@ export class LessonService {
       .trim()
       .split('\n')
       .map((line): Partial<Task> => {
-        const lineWithoutNumberIndex = line.replace(/^\d+\.\s/, '');
-
-        const [question, translation] = lineWithoutNumberIndex.split(' - ');
-
-        const wordsInSquareBracketsRegEx = /(\[.*?\])/g;
-
-        const modelAnswerWithBracketsMatches = question.match(
-          wordsInSquareBracketsRegEx
-        );
-
-        const modelAnswers = modelAnswerWithBracketsMatches.map((ma) =>
-          ma.replace(/[\\[\]]/g, '').trim()
-        );
-
-        if (!modelAnswers || modelAnswers.length === 0 || !question) {
-          throw new Error(`Invalid line format: ${line}`);
-        }
-
-        return {
-          question,
-          modelAnswers: modelAnswers.join(', '),
-          translation,
-          type: TaskType.Cloze,
-          lessonId: lesson.id,
-        };
+        return this.parseOpenApiResponseForClozeTask(line, lesson);
       });
 
     const taskEntities = await this.taskService.createTasks(tasks);
@@ -127,6 +103,35 @@ export class LessonService {
     await this.repository.update(id, data);
 
     return this.getLessonById(id);
+  }
+
+  private parseOpenApiResponseForClozeTask(
+    line: string,
+    lesson: LessonEntity
+  ): Partial<Task> {
+    const lineWithoutNumberIndex = line.replace(/^\d+\.\s/, '');
+    const [question, translation] = lineWithoutNumberIndex.split(' - ');
+
+    const wordsInSquareBracketsRegEx = /(\[.*?\])/g;
+    const modelAnswerWithBracketsMatches = question.match(
+      wordsInSquareBracketsRegEx
+    );
+
+    const modelAnswers = modelAnswerWithBracketsMatches?.map((ma) =>
+      ma.replace(/[\\[\]]/g, '').trim()
+    );
+
+    if (!modelAnswers || modelAnswers.length === 0 || !question) {
+      throw new Error(`Invalid line format: ${line}`);
+    }
+
+    return {
+      question,
+      modelAnswers: modelAnswers.join(', '),
+      translation,
+      type: TaskType.Cloze,
+      lessonId: lesson.id,
+    };
   }
 
   private hasAccessToLesson(lesson: Lesson): boolean {
