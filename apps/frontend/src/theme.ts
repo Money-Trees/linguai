@@ -9,60 +9,7 @@ const config: ThemeConfig = {
   initialColorMode: 'system',
 };
 
-const components: Record<string, StyleConfig> = {
-  Card: {
-    baseStyle: {
-      backgroundColor: 'gray.800',
-      _dark: {
-        backgroundColor: 'white',
-      },
-    },
-  },
-  Table: {
-    variants: {
-      cards: ({ colorMode }) => ({
-        table: {
-          borderSpacing: '0 var(--chakra-space-4)',
-          borderCollapse: 'separate',
-        },
-        thead: {
-          tr: {
-            backgroundColor: 'unset',
-            _hover: { shadow: 'unset' },
-          },
-        },
-        tr: {
-          transitionDuration: '500ms',
-          backgroundColor: colorMode === 'dark' ? 'gray.800' : 'white',
-          _hover: {
-            shadow: 'md',
-          },
-        },
-        th: {
-          paddingY: 0,
-        },
-        td: {
-          position: 'relative',
-          _after: {
-            content: '""',
-            backgroundColor: colorMode === 'dark' ? 'gray.800' : 'gray.200',
-            position: 'absolute',
-            left: '100%',
-            top: 2,
-            bottom: 2,
-            width: '1px',
-          },
-          _first: {
-            borderLeftRadius: 'lg',
-          },
-          _last: {
-            borderRightRadius: 'lg',
-          },
-        },
-      }),
-    },
-  },
-};
+const components: Record<string, StyleConfig> = {};
 
 const theme = extendTheme(
   {
