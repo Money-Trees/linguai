@@ -1,11 +1,12 @@
 import { ReactElement, useEffect, useState } from 'react';
-import { Button, Card, HStack, VStack, Text, Progress } from '@chakra-ui/react';
+import { Button, Card, HStack, VStack, Progress } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 import { useLesson } from '../services/lesson.service';
 import ClozeTestTask from '../components/Task/ClozeTestTask';
 import { Task } from '@naite/types';
 import TaskDescription from '../components/Task/TaskDescription';
 import { useUpdateTask } from '../services/task.service';
+import TaskQuestionTranslation from '../components/Task/TaskQuestionTranslation';
 
 const Lesson = (): ReactElement => {
   const { id } = useParams();
@@ -73,19 +74,7 @@ const Lesson = (): ReactElement => {
               question={currentTask.question}
               onInputValuesChange={handleInputValuesChange}
             />
-            <Card
-              padding="4"
-              backgroundColor="gray.300"
-              _dark={{
-                backgroundColor: 'gray.800',
-              }}
-              width="100%"
-            >
-              <HStack>
-                <Text as="b">Translation:</Text>
-                <Text> {currentTask.translation}</Text>
-              </HStack>
-            </Card>
+            <TaskQuestionTranslation translation={currentTask.translation} />
             <HStack width="100%" justifyContent="flex-end">
               <Button isDisabled={!answer} onClick={() => answerTask()}>
                 Check answer
