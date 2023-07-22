@@ -3,10 +3,12 @@ import { Button, Card, HStack, VStack, Text } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 import { useLesson } from '../services/lesson.service';
 import ClozeTestTask from '../components/Task/ClozeTestTask';
-import { Task } from '@naite/types';
 import TaskDescription from '../components/Task/TaskDescription';
 import { useUpdateTask } from '../services/task.service';
 import ProgressBar from '../components/ProgressBar';
+import { Task } from '@naite/types';
+
+type TaskStatus = 'correct' | 'incorrect' | 'unanswered';
 
 const Lesson = (): ReactElement => {
   const { id } = useParams();
@@ -14,7 +16,7 @@ const Lesson = (): ReactElement => {
   const [currentTask, setCurrentTask] = useState<Task>();
   const { mutate: updateTask } = useUpdateTask(currentTask?.id);
   const [answer, setAnswer] = useState('');
-
+  const [taskStatus, setTaskStatus] = useState<TaskStatus>('unanswered');
   const [completePercentage, setCompletePercentage] = useState<number>(0);
 
   useEffect(() => {
@@ -44,10 +46,12 @@ const Lesson = (): ReactElement => {
       return;
     }
 
-    if (answer === currentTask.modelAnswers && !currentTask.isCompleted) {
+    if (answer === currentTask.modelAnswers) {
       updateTask({ ...currentTask, isCompleted: true });
-    } else if (answer !== currentTask.modelAnswers && currentTask.isCompleted) {
+      setTaskStatus('correct');
+    } else if (answer !== currentTask.modelAnswers) {
       updateTask({ ...currentTask, isCompleted: false });
+      setTaskStatus('incorrect');
     }
   };
 
@@ -78,11 +82,47 @@ const Lesson = (): ReactElement => {
                 <Text> {currentTask.translation}</Text>
               </HStack>
             </Card>
-            <HStack width="100%" justifyContent="flex-end">
-              <Button isDisabled={!answer} onClick={() => answerTask()}>
-                Check answer
-              </Button>
-            </HStack>
+            {taskStatus === 'unanswered' && (
+              <HStack width="100%" justifyContent="flex-end">
+                <Button isDisabled={!answer} onClick={() => answerTask()}>
+                  Check answer
+                </Button>
+              </HStack>
+            )}
+            {taskStatus === 'correct' && (
+              <HStack width="100%" justifyContent="space-between">
+                <Card
+                  display="flex"
+                  flex={1}
+                  p={4}
+                  bg="primary.600"
+                  height="70px"
+                  justifyContent="center"
+                  alignItems="center"
+                >
+                  <Text as="b">Correct answer</Text>
+                </Card>
+                <Button height="70px">Continue</Button>
+              </HStack>
+            )}
+            {taskStatus === 'incorrect' && (
+              <HStack width="100%" justifyContent="space-between">
+                <Card
+                  display="flex"
+                  flex={1}
+                  p={4}
+                  bg="red.300"
+                  height="70px"
+                  justifyContent="center"
+                  alignItems="center"
+                >
+                  <Text as="b" _dark={{ color: 'black' }}>
+                    Wrong answer
+                  </Text>
+                </Card>
+                <Button height="70px">Continue</Button>
+              </HStack>
+            )}
           </>
         )}
       </VStack>

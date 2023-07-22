@@ -64,7 +64,9 @@ const ClozeTestTask = ({
                 onChange={(e) => handleChange(inputIndex, e.target.value)}
                 size="sm"
                 borderRadius="4px"
-                width={`${Math.max(token.length, inputValues.length) * 12}px`} // Roughly set the width based on the word's length
+                width={`${
+                  Math.max(token.length, inputValues[inputIndex].length) * 18
+                }px`} // Roughly set the width based on the word's length
                 lineHeight="normal"
               />
             );
