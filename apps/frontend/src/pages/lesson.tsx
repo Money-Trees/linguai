@@ -1,5 +1,5 @@
 import { ReactElement, useEffect, useState } from 'react';
-import { Button, Card, HStack, VStack, Progress } from '@chakra-ui/react';
+import { Button, Card, HStack, VStack, Progress, Text } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 import { useLesson } from '../services/lesson.service';
 import ClozeTestTask from '../components/Task/ClozeTestTask';
