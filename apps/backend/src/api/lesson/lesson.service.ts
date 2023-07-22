@@ -73,16 +73,15 @@ export class LessonService {
             .replace(/[\\[\]]/g, '')
             .trim();
           const questionWithNumber = line.replace(match[0], match[0].trim());
+          let question = questionWithNumber.replace(/^\d+\.\s/, '');
 
-          const translationSeparatorMatch = questionWithNumber.match(/- (.*)$/);
+          const translationMatch = question.match(/- (.*)$/);
           let translation = '';
-          let question = '';
 
-          if (translationSeparatorMatch) {
-            question = translationSeparatorMatch[0]
-              .replace(/^\d+\.\s/, '')
-              .trim();
-            translation = translationSeparatorMatch[1].trim();
+          if (translationMatch) {
+            translation = translationMatch[1].trim();
+            // Remove the translation from the question
+            question = question.replace(translationMatch[0], '').trim();
           }
 
           return {
