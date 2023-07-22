@@ -58,7 +58,7 @@ export class TaskService {
   }
 
   public async updateTaskById(id: string, data: Partial<Task>): Promise<Task> {
-    const taskToUpdate = await this.getTaskById(id, ['salaries', 'costs']);
+    const taskToUpdate = await this.getTaskById(id);
 
     if (!taskToUpdate) {
       throw new NotFoundException([`Task with id ${id} not found`]);
