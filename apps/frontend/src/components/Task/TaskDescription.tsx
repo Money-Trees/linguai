@@ -1,6 +1,6 @@
 import React from 'react';
 import { TaskType, Topic } from '@naite/types';
-import { Card, Text } from '@chakra-ui/react';
+import { Box, Heading } from '@chakra-ui/react';
 
 interface TaskDescriptionProps {
   taskType: TaskType;
@@ -11,7 +11,7 @@ const TaskDescription = ({
   taskType,
   lessonTopic,
 }: TaskDescriptionProps): React.JSX.Element => {
-  const clozeDescription = `Please fill in the gaps with the correct ${lessonTopic}`;
+  const clozeDescription = `Please fill in the gaps with the correct ${lessonTopic}.`;
 
   const getDescription = (): string => {
     switch (taskType) {
@@ -21,16 +21,9 @@ const TaskDescription = ({
   };
 
   return (
-    <Card
-      backgroundColor="gray.300"
-      _dark={{
-        backgroundColor: 'gray.800',
-      }}
-      padding="4"
-      whiteSpace="pre-wrap"
-    >
-      <Text fontWeight={'semibold'}>{getDescription()}</Text>
-    </Card>
+    <Box padding="4" whiteSpace="pre-wrap" width="100%">
+      <Heading size="md">{getDescription()}</Heading>
+    </Box>
   );
 };
 
