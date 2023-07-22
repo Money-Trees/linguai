@@ -38,7 +38,7 @@ export interface Lesson extends Document {
 export interface Task extends Document {
   question: string;
   translation: string;
-  modelAnswer: string;
+  modelAnswers: string;
   isCompleted?: boolean;
   type: TaskType;
   lessonId: string;

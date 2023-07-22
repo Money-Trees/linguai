@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Lesson, Prompt, Role, TaskType, User } from '@naite/types';
+import { Lesson, Prompt, Role, Task, TaskType, User } from '@naite/types';
 import { DeleteResult, Repository } from 'typeorm';
 import { LessonEntity } from './lesson.entity';
 import { UserEntity } from '../user/user.entity';
@@ -65,35 +65,32 @@ export class LessonService {
     const tasks = responseString
       .trim()
       .split('\n')
-      .map((line) => {
-        const match = line.match(/(\[.*?\])/);
+      .map((line): Partial<Task> => {
+        const lineWithoutNumberIndex = line.replace(/^\d+\.\s/, '');
 
-        if (match) {
-          const modelAnswerWithBrackets = match[0]
-            .replace(/[\\[\]]/g, '')
-            .trim();
-          const questionWithNumber = line.replace(match[0], match[0].trim());
-          let question = questionWithNumber.replace(/^\d+\.\s/, '');
+        const [question, translation] = lineWithoutNumberIndex.split(' - ');
 
-          const translationMatch = question.match(/- (.*)$/);
-          let translation = '';
+        const wordsInSquareBracketsRegEx = /(\[.*?\])/g;
 
-          if (translationMatch) {
-            translation = translationMatch[1].trim();
-            // Remove the translation from the question
-            question = question.replace(translationMatch[0], '').trim();
-          }
+        const modelAnswerWithBracketsMatches = question.match(
+          wordsInSquareBracketsRegEx
+        );
 
-          return {
-            question,
-            modelAnswer: modelAnswerWithBrackets,
-            translation,
-            type: TaskType.Cloze,
-            lessonId: lesson.id,
-          };
-        } else {
+        const modelAnswers = modelAnswerWithBracketsMatches.map((ma) =>
+          ma.replace(/[\\[\]]/g, '').trim()
+        );
+
+        if (!modelAnswers || modelAnswers.length === 0 || !question) {
           throw new Error(`Invalid line format: ${line}`);
         }
+
+        return {
+          question,
+          modelAnswers: modelAnswers.join(', '),
+          translation,
+          type: TaskType.Cloze,
+          lessonId: lesson.id,
+        };
       });
 
     const taskEntities = await this.taskService.createTasks(tasks);

@@ -6,7 +6,7 @@ import { LessonEntity } from '../lesson/lesson.entity';
 @Entity('task')
 export class TaskEntity extends DocumentEntity implements Task {
   @Column()
-  public modelAnswer: string;
+  public modelAnswers: string;
 
   @Column()
   public question: string;

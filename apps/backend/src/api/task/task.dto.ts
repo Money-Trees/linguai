@@ -32,7 +32,7 @@ export class TaskDto extends DocumentDto implements Task {
 
   @IsString()
   @ApiProperty({ example: 'Die' })
-  public modelAnswer: string;
+  public modelAnswers: string;
 }
 
 export class UpdateTaskDto extends PartialType(TaskDto) {}
