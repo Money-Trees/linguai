@@ -13,7 +13,7 @@ export const useUpdateTask = (
 
   return useMutation(
     ['task', taskId, 'update'],
-    (data) => request<Task>(`/tasks/${taskId}`, { method: 'POST', data }),
+    (data) => request<Task>(`/tasks/${taskId}`, { method: 'PATCH', data }),
     {
       onSuccess: (task) => {
         queryClient.invalidateQueries(['lessons', task.lessonId]);

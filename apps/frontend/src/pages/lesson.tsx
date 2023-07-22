@@ -13,6 +13,8 @@ const Lesson = (): ReactElement => {
   const { data: lesson } = useLesson(id, { select: 'tasks' });
   const [currentTask, setCurrentTask] = useState<Task>();
   const { mutate: updateTask } = useUpdateTask(currentTask?.id);
+  const [answer, setAnswer] = useState('');
+
   const [completePercentage, setCompletePercentage] = useState<number>(0);
 
   useEffect(() => {
@@ -33,6 +35,22 @@ const Lesson = (): ReactElement => {
     }
   }, [currentTask, lesson?.tasks]);
 
+  const handleInputValuesChange = (inputValues: string[]): void => {
+    setAnswer(inputValues.filter((value) => !!value.trim()).join(', '));
+  };
+
+  const answerTask = (): void => {
+    if (!currentTask) {
+      return;
+    }
+
+    if (answer === currentTask.modelAnswers && !currentTask.isCompleted) {
+      updateTask({ ...currentTask, isCompleted: true });
+    } else if (answer !== currentTask.modelAnswers && currentTask.isCompleted) {
+      updateTask({ ...currentTask, isCompleted: false });
+    }
+  };
+
   return (
     <Card width="80%" p={8}>
       <ProgressBar completed={completePercentage} />
@@ -43,7 +61,10 @@ const Lesson = (): ReactElement => {
               taskType={currentTask.type}
               lessonTopic={lesson?.topic}
             />
-            <ClozeTestTask question={currentTask.question} />
+            <ClozeTestTask
+              question={currentTask.question}
+              onInputValuesChange={handleInputValuesChange}
+            />
             <Card
               padding="4"
               backgroundColor="gray.300"
@@ -58,7 +79,9 @@ const Lesson = (): ReactElement => {
               </HStack>
             </Card>
             <HStack width="100%" justifyContent="flex-end">
-              <Button>Check answer</Button>
+              <Button isDisabled={!answer} onClick={() => answerTask()}>
+                Check answer
+              </Button>
             </HStack>
           </>
         )}
