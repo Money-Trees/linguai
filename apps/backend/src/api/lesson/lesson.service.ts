@@ -69,14 +69,26 @@ export class LessonService {
         const match = line.match(/(\[.*?\])/);
 
         if (match) {
-          const modelAnswer = match[0].replace(/[\\[\]]/g, '').trim();
-          const question = line
-            .replace(match[0], match[0].trim())
-            .replace(/^\d+\.\s/, '');
+          const modelAnswerWithBrackets = match[0]
+            .replace(/[\\[\]]/g, '')
+            .trim();
+          const questionWithNumber = line.replace(match[0], match[0].trim());
+
+          const translationSeparatorMatch = questionWithNumber.match(/- (.*)$/);
+          let translation = '';
+          let question = '';
+
+          if (translationSeparatorMatch) {
+            question = translationSeparatorMatch[0]
+              .replace(/^\d+\.\s/, '')
+              .trim();
+            translation = translationSeparatorMatch[1].trim();
+          }
 
           return {
             question,
-            modelAnswer,
+            modelAnswer: modelAnswerWithBrackets,
+            translation,
             type: TaskType.Cloze,
             lessonId: lesson.id,
           };

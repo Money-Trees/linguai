@@ -16,6 +16,10 @@ export class TaskDto extends DocumentDto implements Task {
   @ApiProperty({ example: 'My Answer!' })
   public question: string;
 
+  @IsString()
+  @ApiProperty({ example: 'My translation!' })
+  public translation: string;
+
   @IsEnum(TaskType)
   @ApiProperty({
     example: TaskType.Cloze,

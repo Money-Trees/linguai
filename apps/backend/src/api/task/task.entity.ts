@@ -11,6 +11,9 @@ export class TaskEntity extends DocumentEntity implements Task {
   @Column()
   public question: string;
 
+  @Column()
+  public translation: string;
+
   @Column({
     type: 'enum',
     enum: TaskType,

@@ -51,7 +51,7 @@ const Lesson = (): ReactElement => {
                 backgroundColor: 'gray.800',
               }}
             >
-              Translation
+              {currentTask.translation}
             </Card>
           </>
         )}
