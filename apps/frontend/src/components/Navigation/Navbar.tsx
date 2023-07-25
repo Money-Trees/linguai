@@ -13,6 +13,7 @@ import { useDocumentTitle } from '../../hooks/useDocumentTitle';
 import { useAuthUser } from '../../services/user.service';
 import { BANNER_HEIGHT } from '../DevBanner';
 import { UserMenu } from './UserMenu';
+import { Link } from 'react-router-dom';
 
 const Navbar = (): ReactElement => {
   const { data: user } = useAuthUser();
@@ -44,9 +45,11 @@ const Navbar = (): ReactElement => {
         display={{ md: 'none' }}
         icon={<FaBars />}
       />
-      <Heading size="md" color="primary.500">
-        {title}
-      </Heading>
+      <Link to="/">
+        <Heading size="md" color="primary.500" cursor="pointer">
+          {title}
+        </Heading>
+      </Link>
       <Menu>
         <MenuButton as={Avatar} size="sm" src={avatar} />
         <UserMenu />
