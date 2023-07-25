@@ -1,6 +1,6 @@
 import { ReactElement, useEffect, useState } from 'react';
 import { Button, Card, HStack, VStack, Progress, Text } from '@chakra-ui/react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useLesson } from '../services/lesson.service';
 import ClozeTestTask from '../components/Task/ClozeTestTask';
 import TaskDescription from '../components/Task/TaskDescription';
@@ -18,6 +18,7 @@ const Lesson = (): ReactElement => {
   const [answer, setAnswer] = useState('');
   const [taskStatus, setTaskStatus] = useState<TaskStatus>('unanswered');
   const [completePercentage, setCompletePercentage] = useState<number>(0);
+  const [allAnswered, setAllAnswered] = useState<boolean>(false);
 
   useEffect(() => {
     if (lesson?.tasks?.length) {
@@ -55,6 +56,28 @@ const Lesson = (): ReactElement => {
     }
   };
 
+  const goToNextTask = (): void => {
+    if (!lesson?.tasks || taskStatus === 'unanswered') {
+      return;
+    }
+
+    const currentIndex = lesson.tasks.findIndex(
+      (task) => task.id === currentTask?.id
+    );
+
+    const nextIncompleteTask = lesson.tasks
+      .slice(currentIndex + 1)
+      .find((task) => task.isCompleted === null);
+
+    if (nextIncompleteTask) {
+      setAnswer('');
+      setTaskStatus('unanswered');
+      setCurrentTask(nextIncompleteTask);
+    } else {
+      setAllAnswered(true);
+    }
+  };
+
   return (
     <Card width="80%" p={8}>
       <Progress
@@ -68,7 +91,7 @@ const Lesson = (): ReactElement => {
         }}
       />
       <VStack marginTop="32px">
-        {lesson && currentTask && (
+        {lesson && currentTask && !allAnswered && (
           <>
             <TaskDescription
               taskType={currentTask.type}
@@ -99,7 +122,9 @@ const Lesson = (): ReactElement => {
                 >
                   <Text as="b">Correct answer</Text>
                 </Card>
-                <Button height="70px">Continue</Button>
+                <Button height="70px" onClick={() => goToNextTask()}>
+                  Continue
+                </Button>
               </HStack>
             )}
             {taskStatus === 'incorrect' && (
@@ -117,10 +142,35 @@ const Lesson = (): ReactElement => {
                     Wrong answer
                   </Text>
                 </Card>
-                <Button height="70px">Continue</Button>
+                <Button height="70px" onClick={() => goToNextTask()}>
+                  Continue
+                </Button>
               </HStack>
             )}
           </>
+        )}
+        {allAnswered && (
+          <VStack spacing={4} width="100%" alignItems="center">
+            <Card
+              display="flex"
+              flex={1}
+              p={4}
+              bg="green.500"
+              height="70px"
+              justifyContent="center"
+              alignItems="center"
+              borderRadius="md"
+            >
+              <Text as="b" fontSize="xl" color="white">
+                Congratulations! You have completed the lesson!
+              </Text>
+            </Card>
+            <Link to="/">
+              <Button height="70px" width="200px" colorScheme="green">
+                Return to Home
+              </Button>
+            </Link>
+          </VStack>
         )}
       </VStack>
     </Card>
