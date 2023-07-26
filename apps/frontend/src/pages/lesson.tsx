@@ -1,88 +1,108 @@
 import { ReactElement, useEffect, useState } from 'react';
-import { Button, Card, HStack, VStack, Progress, Text } from '@chakra-ui/react';
+import {
+  Button,
+  Card,
+  VStack,
+  Progress,
+  Text,
+  Spinner,
+} from '@chakra-ui/react';
 import { Link, useParams } from 'react-router-dom';
 import { useLesson } from '../services/lesson.service';
-import ClozeTestTask from '../components/Task/ClozeTestTask';
-import TaskDescription from '../components/Task/TaskDescription';
-import { useUpdateTask } from '../services/task.service';
-import TaskQuestionTranslation from '../components/Task/TaskQuestionTranslation';
 import { Task } from '@naite/types';
+import TaskContainer from '../components/Task/TaskContainer';
 
-type TaskStatus = 'correct' | 'incorrect' | 'unanswered';
+export type LessonState =
+  | {
+      status: 'ongoing';
+      currentTask: Task | undefined;
+      completionPercentage: number;
+    }
+  | {
+      status: 'completed';
+      currentTask: undefined;
+      completionPercentage: 100;
+    }
+  | {
+      status: 'empty';
+      currentTask: undefined;
+      completionPercentage: 100;
+    };
 
 const Lesson = (): ReactElement => {
   const { id } = useParams();
-  const { data: lesson } = useLesson(id, { select: 'tasks' });
-  const [currentTask, setCurrentTask] = useState<Task>();
-  const { mutate: updateTask } = useUpdateTask(currentTask?.id);
-  const [answer, setAnswer] = useState('');
-  const [taskStatus, setTaskStatus] = useState<TaskStatus>('unanswered');
-  const [completePercentage, setCompletePercentage] = useState<number>(0);
-  const [allAnswered, setAllAnswered] = useState<boolean>(false);
+  const { data: lesson, isLoading } = useLesson(id, { select: 'tasks' });
 
-  useEffect(() => {
-    if (lesson?.tasks?.length) {
-      setCurrentTask(lesson.tasks.find((task) => !task.isCompleted));
-    }
-  }, [lesson]);
+  const [lessonState, setLessonState] = useState<LessonState>();
 
-  useEffect(() => {
-    if (lesson?.tasks?.length) {
-      const completedCount = lesson.tasks.reduce(
-        (prev, task) => (task.isCompleted ? prev + 1 : prev),
-        0
-      );
+  const getNewTask = (tasks: Task[], currentTask?: Task): Task | undefined => {
+    const taskIndex = currentTask
+      ? tasks.findIndex((task) => currentTask.id === task.id)
+      : 0;
 
-      const percentage = (completedCount / lesson.tasks.length) * 100;
-      setCompletePercentage(percentage);
-    }
-  }, [currentTask, lesson?.tasks]);
-
-  const handleInputValuesChange = (inputValues: string[]): void => {
-    setAnswer(inputValues.filter((value) => !!value.trim()).join(', '));
-  };
-
-  const answerTask = (): void => {
-    if (!currentTask) {
-      return;
-    }
-
-    if (answer === currentTask.modelAnswers) {
-      updateTask({ ...currentTask, isCompleted: true });
-      setTaskStatus('correct');
-    } else if (answer !== currentTask.modelAnswers) {
-      updateTask({ ...currentTask, isCompleted: false });
-      setTaskStatus('incorrect');
-    }
-  };
-
-  const goToNextTask = (): void => {
-    if (!lesson?.tasks || taskStatus === 'unanswered') {
-      return;
-    }
-
-    const currentIndex = lesson.tasks.findIndex(
-      (task) => task.id === currentTask?.id
+    const newTaskInNextTasks = tasks.find(
+      (task, index) => !task.isCompleted && taskIndex < index
+    );
+    const newTasksInPreviousTasks = tasks.find(
+      (task, index) => !task.isCompleted && taskIndex > index
     );
 
-    const nextIncompleteTask = lesson.tasks
-      .slice(currentIndex + 1)
-      .find((task) => task.isCompleted === null);
-
-    if (nextIncompleteTask) {
-      setAnswer('');
-      setTaskStatus('unanswered');
-      setCurrentTask(nextIncompleteTask);
-    } else {
-      setAllAnswered(true);
-    }
+    return newTaskInNextTasks || newTasksInPreviousTasks;
   };
+
+  const getCompletionPercentage = (tasks: Task[]): number => {
+    const completedCount = tasks.reduce(
+      (prev, task) => (task.isCompleted ? prev + 1 : prev),
+      0
+    );
+
+    return (completedCount / tasks.length) * 100;
+  };
+
+  useEffect(() => {
+    if (!lesson || !lesson.tasks) {
+      return;
+    } else if (!lesson?.tasks.length) {
+      setLessonState({
+        status: 'empty',
+        currentTask: undefined,
+        completionPercentage: 100,
+      });
+    }
+
+    const isCompleted = lesson.tasks.every((task) => task.isCompleted);
+    const newLessonState: LessonState = isCompleted
+      ? {
+          status: 'completed',
+          currentTask: undefined,
+          completionPercentage: 100,
+        }
+      : {
+          status: 'ongoing',
+          currentTask: getNewTask(lesson.tasks, lessonState?.currentTask),
+          completionPercentage: getCompletionPercentage(lesson.tasks),
+        };
+
+    setLessonState(newLessonState);
+  }, [lesson, lessonState?.currentTask]);
+
+  if (
+    !lesson ||
+    !lessonState ||
+    (lessonState.status === 'ongoing' && !lessonState.currentTask)
+  ) {
+    return (
+      <Card width="80%" p={8}>
+        {isLoading ? <Spinner /> : 'Lesson not found :/'}
+      </Card>
+    );
+  }
 
   return (
     <Card width="80%" p={8}>
       <Progress
         borderRadius={'md'}
-        value={completePercentage}
+        value={lessonState?.completionPercentage}
         isAnimated={true}
         sx={{
           '& > div:first-child': {
@@ -91,65 +111,10 @@ const Lesson = (): ReactElement => {
         }}
       />
       <VStack marginTop="32px">
-        {lesson && currentTask && !allAnswered && (
-          <>
-            <TaskDescription
-              taskType={currentTask.type}
-              lessonTopic={lesson?.topic}
-            />
-            <ClozeTestTask
-              question={currentTask.question}
-              onInputValuesChange={handleInputValuesChange}
-            />
-            <TaskQuestionTranslation translation={currentTask.translation} />
-            {taskStatus === 'unanswered' && (
-              <HStack width="100%" justifyContent="flex-end">
-                <Button isDisabled={!answer} onClick={() => answerTask()}>
-                  Check answer
-                </Button>
-              </HStack>
-            )}
-            {taskStatus === 'correct' && (
-              <HStack width="100%" justifyContent="space-between">
-                <Card
-                  display="flex"
-                  flex={1}
-                  p={4}
-                  bg="primary.600"
-                  height="70px"
-                  justifyContent="center"
-                  alignItems="center"
-                >
-                  <Text as="b">Correct answer</Text>
-                </Card>
-                <Button height="70px" onClick={() => goToNextTask()}>
-                  Continue
-                </Button>
-              </HStack>
-            )}
-            {taskStatus === 'incorrect' && (
-              <HStack width="100%" justifyContent="space-between">
-                <Card
-                  display="flex"
-                  flex={1}
-                  p={4}
-                  bg="red.300"
-                  height="70px"
-                  justifyContent="center"
-                  alignItems="center"
-                >
-                  <Text as="b" _dark={{ color: 'black' }}>
-                    Wrong answer
-                  </Text>
-                </Card>
-                <Button height="70px" onClick={() => goToNextTask()}>
-                  Continue
-                </Button>
-              </HStack>
-            )}
-          </>
+        {lessonState.status === 'ongoing' && (
+          <TaskContainer task={lessonState.currentTask!} topic={lesson.topic} />
         )}
-        {allAnswered && (
+        {lessonState.status === 'empty' && (
           <VStack spacing={4} width="100%" alignItems="center">
             <Card
               display="flex"
