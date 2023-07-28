@@ -25,7 +25,9 @@ const SettingsPage: React.FC = () => {
 
   const { colorMode, toggleColorMode } = useColorMode();
 
-  const handleProfileImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleProfileImageChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ): void => {
     setSettings((prevSettings) => ({
       ...prevSettings,
       profileImage: e.target.value,
