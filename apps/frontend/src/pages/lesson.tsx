@@ -23,26 +23,31 @@ const Lesson = (): ReactElement => {
 
   const [lessonState, setLessonState] = useState<LessonState>();
 
-  const getNewTask = useCallback<() => Task | undefined>(() => {
-    if (!lesson?.tasks?.length) {
-      return undefined;
-    }
+  const getNewTask = useCallback(
+    (currentTask?: Task): Task | undefined => {
+      if (!lesson?.tasks?.length) {
+        return undefined;
+      }
 
-    const taskIndex = lessonState?.currentTask
-      ? lesson.tasks.findIndex(
-          (task) => lessonState?.currentTask?.id === task.id
-        )
-      : 0;
+      if (!currentTask) {
+        return lesson.tasks[0];
+      }
 
-    const newTaskInNextTasks = lesson.tasks.find(
-      (task, index) => !task.isCompleted && taskIndex < index
-    );
-    const newTasksInPreviousTasks = lesson.tasks.find(
-      (task, index) => !task.isCompleted && taskIndex > index
-    );
+      const taskIndex = lesson.tasks.findIndex(
+        (task) => currentTask.id === task.id
+      );
 
-    return newTaskInNextTasks || newTasksInPreviousTasks;
-  }, [lesson, lessonState]);
+      const newTaskInNextTasks = lesson.tasks.find(
+        (task, index) => !task.isCompleted && taskIndex < index
+      );
+      const newTasksInPreviousTasks = lesson.tasks.find(
+        (task, index) => !task.isCompleted && taskIndex > index
+      );
+
+      return newTaskInNextTasks || newTasksInPreviousTasks;
+    },
+    [lesson]
+  );
 
   const getCompletionPercentage = (tasks: Task[]): number => {
     const completedCount = tasks.reduce(
