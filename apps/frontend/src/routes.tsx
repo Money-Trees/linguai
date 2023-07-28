@@ -1,6 +1,7 @@
 import { Role } from '@naite/types';
 import HomePage from './pages/home';
 import Lesson from './pages/lesson';
+import Settings from './pages/settings';
 
 interface PageRoute {
   path: `/${string}`;
@@ -19,6 +20,11 @@ export const navigationRoutes: PageRoute[] = [
     component: <Lesson />,
     label: 'Lesson',
     path: '/lesson/:id',
+  },
+  {
+    component: <Settings />,
+    label: 'Settings',
+    path: '/settings',
   },
 ];
 
