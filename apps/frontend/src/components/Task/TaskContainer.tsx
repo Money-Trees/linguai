@@ -23,7 +23,6 @@ const TaskContainer = ({ task, topic }: TaskProps): React.JSX.Element => {
   const { mutate: updateTask } = useUpdateTask(task.id);
 
   const handleInputValuesChange = (inputValues: string[]): void => {
-    console.log(inputValues);
     setTaskState({
       type: 'UNANSWERED',
       answer: inputValues.filter((value) => !!value.trim()).join(', '),
@@ -36,14 +35,11 @@ const TaskContainer = ({ task, topic }: TaskProps): React.JSX.Element => {
     }
 
     if (taskState.answer === task.modelAnswers) {
-      updateTask({ ...task, isCompleted: true });
       setTaskState((prevState) => ({
         type: 'CORRECT',
         answer: prevState.answer,
       }));
-    } else if (taskState.answer !== task.modelAnswers) {
-      // TODO why else if? what other cases are there
-      updateTask({ ...task, isCompleted: false });
+    } else {
       setTaskState((prevState) => ({
         type: 'CORRECT',
         answer: prevState.answer,
