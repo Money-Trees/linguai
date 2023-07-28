@@ -20,7 +20,6 @@ export interface LessonState {
 const Lesson = (): ReactElement => {
   const { id } = useParams();
   const { data: lesson, isLoading } = useLesson(id, { select: 'tasks' });
-  console.log(lesson);
 
   const [lessonState, setLessonState] = useState<LessonState>();
 
@@ -55,10 +54,19 @@ const Lesson = (): ReactElement => {
   };
 
   useEffect(() => {
-    console.log(getNewTask());
+    if (!lesson?.tasks) {
+      return;
+    }
 
-    setLessonState(undefined);
-  }, [lesson]);
+    setLessonState({
+      status: lesson.tasks.length
+        ? lesson.tasks.every((task) => task.isCompleted)
+          ? 'completed'
+          : 'ongoing'
+        : 'empty',
+      currentTask: getNewTask(),
+    });
+  }, [getNewTask, lesson]);
 
   if (
     !lesson ||

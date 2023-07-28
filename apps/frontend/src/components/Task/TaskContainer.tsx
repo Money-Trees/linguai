@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import TaskDescription from './TaskDescription';
 import ClozeTestTask from './ClozeTestTask';
 import TaskQuestionTranslation from './TaskQuestionTranslation';
@@ -22,12 +22,12 @@ const TaskContainer = ({ task, topic }: TaskProps): React.JSX.Element => {
   const [taskState, setTaskState] = useState<TaskState>(initialTaskState);
   const { mutate: updateTask } = useUpdateTask(task.id);
 
-  const handleInputValuesChange = (inputValues: string[]): void => {
+  const handleInputValuesChange = useCallback((inputValues: string[]): void => {
     setTaskState({
       type: 'UNANSWERED',
       answer: inputValues.filter((value) => !!value.trim()).join(', '),
     });
-  };
+  }, []);
 
   const answerTask = (): void => {
     if (!task) {
