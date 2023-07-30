@@ -1,17 +1,17 @@
 import React from 'react';
-import { TaskType, Topic } from '@naite/types';
+import { TaskType, Subtopic } from '@naite/types';
 import { Box, Heading } from '@chakra-ui/react';
 
 interface TaskDescriptionProps {
   taskType: TaskType;
-  lessonTopic: Topic;
+  lessonSubtopic: Subtopic;
 }
 
 const TaskDescription = ({
   taskType,
-  lessonTopic,
+  lessonSubtopic,
 }: TaskDescriptionProps): React.JSX.Element => {
-  const clozeDescription = `Please fill in the gaps with the correct ${lessonTopic}.`;
+  const clozeDescription = `Please fill in the gaps with the correct ${lessonSubtopic}.`;
 
   const getDescription = (): string => {
     switch (taskType) {

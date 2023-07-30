@@ -1,4 +1,4 @@
-import { Language, Lesson, Task, Topic, User } from '@naite/types';
+import { Language, Lesson, Task, Subtopic, User } from '@naite/types';
 import { Column, Entity, OneToMany } from 'typeorm';
 import { DocumentEntity } from '../../database/document.entity';
 import { TaskEntity } from '../task/task.entity';
@@ -23,7 +23,7 @@ export class LessonEntity extends DocumentEntity implements Lesson {
   @Column({
     type: 'varchar',
   })
-  public topic: Topic;
+  public subtopic: Subtopic;
 
   @OneToMany(() => TaskEntity, (taskEntity) => taskEntity.lesson)
   public readonly tasks: Task[];

@@ -61,7 +61,7 @@ const LessonCard = ({ lesson }: { lesson: Lesson }): ReactElement => {
           </Box>
           <Box>
             <Text>Grammar concept: </Text>
-            <Badge>{lesson.topic}</Badge>
+            <Badge>{lesson.subtopic}</Badge>
           </Box>
         </VStack>
       </CardBody>

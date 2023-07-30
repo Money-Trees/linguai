@@ -1,5 +1,5 @@
 import { ReactElement, useEffect, useMemo, useState } from 'react';
-import { Card, HStack, Input, Text } from '@chakra-ui/react';
+import { Card, HStack, Input, Text, VStack } from '@chakra-ui/react';
 
 interface Props {
   question: string;
@@ -11,7 +11,14 @@ const ClozeTestTask = ({
   onInputValuesChange,
 }: Props): ReactElement => {
   const regex = useMemo(() => /\[.*?]/, []);
-  const tokens = useMemo(() => question.split(/\s+/), [question]); // Tokenize by space (word boundaries)
+  const descriptionTokens = useMemo(
+    () => question.match(/\{.*?}/g) || [],
+    [question]
+  );
+  const tokens = useMemo(
+    () => question.replace(/\{.*?}/g, '').split(/\s+/),
+    [question]
+  );
   const [inputValues, setInputValues] = useState<string[]>(
     tokens.filter((token) => regex.test(token)).map(() => '')
   );
@@ -42,7 +49,7 @@ const ClozeTestTask = ({
       whiteSpace="pre-wrap"
       width="100%"
     >
-      <HStack wrap={'wrap'}>
+      <HStack wrap={'wrap'} alignItems="flex-start">
         {tokens.map((token, index) => {
           if (token.match(regex)) {
             const inputIndex = tokens
@@ -50,32 +57,43 @@ const ClozeTestTask = ({
               .findIndex((t) => t === token);
 
             return (
-              <Input
-                isRequired
-                key={index}
-                type="text"
-                value={inputValues[inputIndex]}
-                variant="filled"
-                bg="gray.400"
-                fontWeight="bold"
-                fontSize="18px"
-                _dark={{
-                  backgroundColor: 'gray.600',
-                }}
-                _hover={{
-                  filter: 'brightness(0.8)',
-                }}
-                onChange={(e) => handleChange(inputIndex, e.target.value)}
-                size="sm"
-                borderRadius="4px"
-                width={`${
-                  Math.max(token.length, inputValues[inputIndex]?.length) * 18
-                }px`} // Roughly set the width based on the word's length
-                lineHeight="normal"
-              />
+              <VStack>
+                <Input
+                  isRequired
+                  key={index}
+                  type="text"
+                  value={inputValues[inputIndex]}
+                  variant="filled"
+                  bg="gray.400"
+                  fontWeight="bold"
+                  fontSize="18px"
+                  _dark={{
+                    backgroundColor: 'gray.600',
+                  }}
+                  _hover={{
+                    filter: 'brightness(0.8)',
+                  }}
+                  onChange={(e) => handleChange(inputIndex, e.target.value)}
+                  size="sm"
+                  borderRadius="4px"
+                  width={`${
+                    Math.max(token.length, inputValues[inputIndex]?.length) * 18
+                  }px`} // Roughly set the width based on the word's length
+                  lineHeight="normal"
+                />
+                <Text as="small" color="gray.200">
+                  {descriptionTokens[inputIndex]
+                    .replace('{', '')
+                    .replace('}', '')}
+                </Text>
+              </VStack>
             );
           } else {
-            return <Text key={index}>{token}</Text>;
+            return (
+              <Text fontSize={22} key={index}>
+                {token}
+              </Text>
+            );
           }
         })}
       </HStack>

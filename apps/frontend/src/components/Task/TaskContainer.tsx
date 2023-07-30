@@ -3,12 +3,12 @@ import TaskDescription from './TaskDescription';
 import ClozeTestTask from './ClozeTestTask';
 import TaskQuestionTranslation from './TaskQuestionTranslation';
 import { Button, Card, HStack, Text } from '@chakra-ui/react';
-import { Task, Topic } from '@naite/types';
+import { Task, Subtopic } from '@naite/types';
 import { useUpdateTask } from '../../services/task.service';
 
 interface TaskProps {
   task: Task;
-  topic: Topic;
+  subtopic: Subtopic;
 }
 
 export type TaskState =
@@ -18,7 +18,7 @@ export type TaskState =
 
 const initialTaskState: TaskState = { type: 'UNANSWERED', answer: '' };
 
-const TaskContainer = ({ task, topic }: TaskProps): React.JSX.Element => {
+const TaskContainer = ({ task, subtopic }: TaskProps): React.JSX.Element => {
   const [taskState, setTaskState] = useState<TaskState>(initialTaskState);
   const { mutate: updateTask } = useUpdateTask(task.id);
 
@@ -53,7 +53,7 @@ const TaskContainer = ({ task, topic }: TaskProps): React.JSX.Element => {
 
   return (
     <>
-      <TaskDescription taskType={task.type} lessonTopic={topic} />
+      <TaskDescription taskType={task.type} lessonSubtopic={subtopic} />
       <ClozeTestTask
         question={task.question}
         onInputValuesChange={handleInputValuesChange}

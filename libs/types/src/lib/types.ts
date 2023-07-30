@@ -20,4 +20,4 @@ export class Prompt<T> {
   }
 }
 
-export type Topic = GermanTopic | FrenchTopic;
+export type Subtopic = GermanTopic | FrenchTopic;

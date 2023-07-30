@@ -13,7 +13,7 @@ import {
   GermanTopic,
   Language,
   Lesson,
-  Topic,
+  Subtopic,
 } from '@naite/types';
 import SelectInput from '../Inputs/SelectInput';
 
@@ -22,7 +22,7 @@ interface Props {
   onChange: (key: keyof Lesson, value: unknown) => void;
 }
 
-const getTopics = (language?: Language): Topic[] => {
+const getTopics = (language?: Language): Subtopic[] => {
   if (!language) {
     return Object.values(GermanTopic);
   }
@@ -59,8 +59,8 @@ const LessonForm = ({ lessonData, onChange }: Props): ReactElement => {
         <SelectInput
           label="Grammar concept"
           options={getTopics(lessonData.language)}
-          value={lessonData.topic as string}
-          onChange={(value) => onChange('topic', value)}
+          value={lessonData.subtopic as string}
+          onChange={(value) => onChange('subtopic', value)}
           getOptionLabel={(option) => option}
         />
       </Box>

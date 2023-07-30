@@ -107,7 +107,10 @@ const Lesson = (): ReactElement => {
       />
       <VStack marginTop="32px">
         {lessonState.status === 'ongoing' && (
-          <TaskContainer task={lessonState.currentTask!} topic={lesson.topic} />
+          <TaskContainer
+            task={lessonState.currentTask!}
+            subtopic={lesson.subtopic}
+          />
         )}
         {lessonState.status === 'empty' && (
           <VStack spacing={4} width="100%" alignItems="center">

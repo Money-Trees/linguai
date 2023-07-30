@@ -32,7 +32,7 @@ const LessonOverlay = ({ isOpen, onClose, language }: Props): ReactElement => {
     return (
       !!lessonData.language &&
       !!lessonData.userId &&
-      !!lessonData.topic &&
+      !!lessonData.subtopic &&
       !!lessonData.theme
     );
   };

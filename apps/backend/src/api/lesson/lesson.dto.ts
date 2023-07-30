@@ -5,7 +5,7 @@ import {
   Lesson,
   Task,
   TaskType,
-  Topic,
+  Subtopic,
   User,
 } from '@naite/types';
 import { IsEnum, IsOptional, IsString, IsUUID } from 'class-validator';
@@ -34,7 +34,7 @@ export class LessonDto extends DocumentDto implements Lesson {
   @ApiProperty({
     example: GermanTopic.Articles,
   })
-  public topic: Topic;
+  public subtopic: Subtopic;
 
   @IsOptional()
   @ApiPropertyOptional()

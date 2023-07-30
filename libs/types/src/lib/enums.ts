@@ -12,6 +12,12 @@ export enum Language {
   French = 'french',
 }
 
+export enum GermanSuperTopics {
+  Pronouns = 'pronouns',
+  Articles = 'articles',
+  tenses = 'tenses',
+}
+
 export enum GermanTopic {
   Articles = 'articles',
   PossessivePronouns = 'possessivePronouns',
