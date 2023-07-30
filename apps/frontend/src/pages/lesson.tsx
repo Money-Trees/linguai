@@ -30,7 +30,7 @@ const Lesson = (): ReactElement => {
       }
 
       if (!currentTask) {
-        return lesson.tasks[0];
+        return lesson.tasks.find((task) => !task.isCompleted);
       }
 
       const taskIndex = lesson.tasks.findIndex(

@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useState } from 'react';
+import { ReactElement, useEffect, useMemo, useState } from 'react';
 import { Card, HStack, Input, Text } from '@chakra-ui/react';
 
 interface Props {
@@ -10,11 +10,15 @@ const ClozeTestTask = ({
   question,
   onInputValuesChange,
 }: Props): ReactElement => {
-  const regex = /\[.*?]/;
-  const tokens = question.split(/\s+/); // Tokenize by space (word boundaries)
+  const regex = useMemo(() => /\[.*?]/, []);
+  const tokens = useMemo(() => question.split(/\s+/), [question]); // Tokenize by space (word boundaries)
   const [inputValues, setInputValues] = useState<string[]>(
     tokens.filter((token) => regex.test(token)).map(() => '')
   );
+
+  useEffect(() => {
+    setInputValues(tokens.filter((token) => regex.test(token)).map(() => ''));
+  }, [regex, tokens]);
 
   useEffect(() => {
     onInputValuesChange(inputValues);
@@ -65,7 +69,7 @@ const ClozeTestTask = ({
                 size="sm"
                 borderRadius="4px"
                 width={`${
-                  Math.max(token.length, inputValues[inputIndex].length) * 18
+                  Math.max(token.length, inputValues[inputIndex]?.length) * 18
                 }px`} // Roughly set the width based on the word's length
                 lineHeight="normal"
               />

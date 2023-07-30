@@ -41,7 +41,7 @@ const TaskContainer = ({ task, topic }: TaskProps): React.JSX.Element => {
       }));
     } else {
       setTaskState((prevState) => ({
-        type: 'CORRECT',
+        type: 'INCORRECT',
         answer: prevState.answer,
       }));
     }

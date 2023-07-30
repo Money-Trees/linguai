@@ -11,8 +11,7 @@ const TaskQuestionTranslation = ({
   highlightModelAnswer = false,
 }: TaskQuestionTranslationProps): React.JSX.Element => {
   const regex = /\[.*?]/;
-  const tokens = translation.split(regex); // Split by square brackets
-  const matches = translation.match(regex); // Find all occurrences of square brackets
+  const tokens = translation.split(/\s+/);
 
   return (
     <Card
@@ -28,14 +27,15 @@ const TaskQuestionTranslation = ({
         <Text>
           {tokens.map((token, index) => (
             <React.Fragment key={index}>
-              {token}
-              {matches && matches[index] && (
+              {regex.test(token) ? (
                 <Text
                   as="span"
                   textDecor={highlightModelAnswer ? 'underline' : ''}
                 >
-                  {matches[index].slice(1, -1)}
+                  {token.replace('[', ' ').replace(']', ' ')}
                 </Text>
+              ) : (
+                ` ${token}`
               )}
             </React.Fragment>
           ))}
