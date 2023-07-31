@@ -17,8 +17,8 @@ import { Link } from 'react-router-dom';
 
 const Navbar = (): ReactElement => {
   const { data: user } = useAuthUser();
-  const title = useDocumentTitle();
   const avatar = useMemo(() => user?.image, [user?.image]);
+  const title = useDocumentTitle();
 
   return (
     <Flex
@@ -51,7 +51,12 @@ const Navbar = (): ReactElement => {
         </Heading>
       </Link>
       <Menu>
-        <MenuButton as={Avatar} size="sm" src={avatar} />
+        <MenuButton
+          as={Avatar}
+          size="sm"
+          name={`${user?.firstname} ${user?.lastname}`}
+          src={avatar}
+        />
         <UserMenu />
       </Menu>
     </Flex>
