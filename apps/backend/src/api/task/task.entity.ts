@@ -27,7 +27,7 @@ export class TaskEntity extends DocumentEntity implements Task {
   public lessonId!: Lesson['id'];
 
   @ManyToOne(() => LessonEntity, (lessonEntity) => lessonEntity.tasks, {
-    cascade: true,
+    onDelete: 'CASCADE',
   })
   public readonly lesson: Lesson;
 }

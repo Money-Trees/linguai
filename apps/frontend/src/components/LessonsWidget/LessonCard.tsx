@@ -11,9 +11,11 @@ import {
   Text,
   VStack,
   Progress,
+  HStack,
 } from '@chakra-ui/react';
-import { ReactElement } from 'react';
+import React, { ReactElement } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { LessonCardMenu } from './LessonCardMenu';
 
 const LessonCard = ({ lesson }: { lesson: Lesson }): ReactElement => {
   const navigate = useNavigate();
@@ -39,9 +41,12 @@ const LessonCard = ({ lesson }: { lesson: Lesson }): ReactElement => {
       }}
     >
       <CardHeader>
-        <Heading title={lesson.name} size="md" noOfLines={1} maxWidth="full">
-          {lesson.name}
-        </Heading>
+        <HStack maxWidth={'full'} justifyContent={'space-between'}>
+          <Heading title={lesson.name} size="md" noOfLines={1}>
+            {lesson.name}
+          </Heading>
+          <LessonCardMenu lesson={lesson} />
+        </HStack>
       </CardHeader>
       <CardBody>
         <VStack alignItems="flex-start" gap={4}>

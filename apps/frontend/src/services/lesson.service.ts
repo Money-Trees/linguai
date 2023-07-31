@@ -8,6 +8,7 @@ import {
 import { Lesson, RequestBody } from '@naite/types';
 import request, { RequestError } from './api.service';
 import { useNotification } from '../hooks/useNotification';
+import { DeleteResult } from 'typeorm';
 
 type LessonSelect = 'tasks';
 
@@ -44,6 +45,25 @@ export const useAddLesson = (): UseMutationResult<
           status: 'success',
           description: `Lessons successfully created`,
         });
+      },
+    }
+  );
+};
+
+export const useDeleteLesson = (): UseMutationResult<
+  DeleteResult,
+  RequestError,
+  string
+> => {
+  const queryClient = useQueryClient();
+
+  return useMutation(
+    ['lessons', 'delete'],
+    (lessonId: string) =>
+      request<DeleteResult>(`/lessons/${lessonId}`, { method: 'DELETE' }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['lessons'], { exact: true });
       },
     }
   );
