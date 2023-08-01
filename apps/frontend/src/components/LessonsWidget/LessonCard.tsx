@@ -39,10 +39,11 @@ const LessonCard = ({ lesson }: { lesson: Lesson }): ReactElement => {
       _dark={{
         backgroundColor: 'gray.800',
       }}
+      width="full"
     >
       <CardHeader>
-        <HStack maxWidth={'full'} justifyContent={'space-between'}>
-          <Heading title={lesson.name} size="md" noOfLines={1}>
+        <HStack width={'full'} justifyContent={'space-between'}>
+          <Heading title={lesson.name} size={['sm', 'md', 'md']} noOfLines={1}>
             {lesson.name}
           </Heading>
           <LessonCardMenu lesson={lesson} />
