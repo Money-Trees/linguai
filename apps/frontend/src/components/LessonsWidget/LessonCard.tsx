@@ -39,7 +39,7 @@ const LessonCard = ({ lesson }: { lesson: Lesson }): ReactElement => {
       _dark={{
         backgroundColor: 'gray.800',
       }}
-      width="full"
+      width={'full'}
     >
       <CardHeader>
         <HStack width={'full'} justifyContent={'space-between'}>

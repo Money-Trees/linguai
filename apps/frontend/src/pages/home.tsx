@@ -22,7 +22,7 @@ const HomePage = (): ReactElement => {
   }, [language, lessons]);
 
   return (
-    <Card width="80%" p={8}>
+    <Card width={['90%', '80%', '80%']} p={[6, 8, 8]}>
       <VStack rowGap="32px">
         <SelectInput
           options={Object.values(Language)}
