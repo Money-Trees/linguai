@@ -41,7 +41,7 @@ export const LessonCardMenu = ({
             onDelete={() => deleteLesson(lesson.id)}
             onOpen={onOpen}
             isOpen={isOpen}
-            title={'Delete Lesson'}
+            title={'Lesson'}
             buttonText={'Delete Lesson'}
             icon={true}
           />

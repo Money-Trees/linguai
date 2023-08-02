@@ -67,7 +67,7 @@ const DeleteButton = ({
         onClose={onClose}
       >
         <AlertDialogOverlay>
-          <AlertDialogContent>
+          <AlertDialogContent width={['80%', 'md', 'md']}>
             <AlertDialogHeader fontSize="lg" fontWeight="bold">
               Delete {title}
             </AlertDialogHeader>
