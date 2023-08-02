@@ -57,12 +57,12 @@ const ClozeTestTask = ({
               .findIndex((t) => t === token);
 
             return (
-              <VStack>
+              <VStack key={token}>
                 <Input
                   isRequired
                   key={index}
                   type="text"
-                  value={inputValues[inputIndex]}
+                  value={inputValues[inputIndex] || ''}
                   variant="filled"
                   bg="gray.400"
                   fontWeight="bold"
@@ -82,9 +82,10 @@ const ClozeTestTask = ({
                   lineHeight="normal"
                 />
                 <Text as="small" color="gray.200">
-                  {descriptionTokens[inputIndex]
-                    .replace('{', '')
-                    .replace('}', '')}
+                  {descriptionTokens[inputIndex] &&
+                    descriptionTokens[inputIndex]
+                      .replace('{', '')
+                      .replace('}', '')}
                 </Text>
               </VStack>
             );

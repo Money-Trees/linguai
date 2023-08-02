@@ -1,18 +1,19 @@
 import { Lesson, PromptTemplate, Subtopic } from '@naite/types';
 
-const precedeWithPersonAndNumber = (subtopic: Subtopic): string =>
+const precedeWithPersonNumberGender = (subtopic: Subtopic): string =>
   `
     Each ${subtopic} in square brackets should be followed by the person and number (singular of plural) of ${subtopic} in curly brackets which should not be included in the translation.
-    Example: [Mein] {1st person singular} Pass liegt sicher in [meiner] {1st person singular} Tasche.
+    The curly brackets should also contain the gender of the ${subtopic} if needed.
+    Example: [Mein] {1st person singular} Pass liegt sicher in [ihrer] {3rd person singular feminine} Tasche.
   `;
 
 const topicSpecificPrompt: {
   [key in Subtopic]: (subtopic: Subtopic) => string;
 } = {
   articles: () => '',
-  possessivePronouns: precedeWithPersonAndNumber,
-  presentTense: precedeWithPersonAndNumber,
-  compositePastTense: precedeWithPersonAndNumber,
+  possessivePronouns: precedeWithPersonNumberGender,
+  presentTense: precedeWithPersonNumberGender,
+  compositePastTense: precedeWithPersonNumberGender,
 };
 
 export const lessonPromptTemplate = {

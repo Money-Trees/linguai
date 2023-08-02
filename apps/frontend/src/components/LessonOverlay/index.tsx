@@ -4,7 +4,7 @@ import LessonForm from '../LessonForm';
 import { Language, Lesson, RequestBody } from '@naite/types';
 import { useAuthUser } from '../../services/user.service';
 import { useAddLesson } from '../../services/lesson.service';
-import { Show, Spinner } from '@chakra-ui/react';
+import { HStack, Show, Spinner, Text } from '@chakra-ui/react';
 import DrawerContainer from '../DrawerContainer';
 
 interface Props {
@@ -80,7 +80,10 @@ const LessonOverlay = ({ isOpen, onClose, language }: Props): ReactElement => {
           isLoading={isLoading}
         >
           {isLoading ? (
-            <Spinner />
+            <HStack>
+              <Text>Generating new lesson. This may take a while.</Text>
+              <Spinner />
+            </HStack>
           ) : (
             <LessonForm lessonData={lessonData} onChange={handleChange} />
           )}
