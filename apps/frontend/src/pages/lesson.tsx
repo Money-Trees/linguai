@@ -94,7 +94,7 @@ const Lesson = (): ReactElement => {
   }
 
   return (
-    <Card width="80%" p={8}>
+    <Card width={['90%', '80%', '80%']} p={[6, 8, 8]}>
       <Progress
         borderRadius={'md'}
         value={getCompletionPercentage(lesson.tasks)}

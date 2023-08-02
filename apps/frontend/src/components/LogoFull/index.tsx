@@ -1,6 +1,6 @@
 import { Box, BoxProps, Image, useColorMode } from '@chakra-ui/react';
-import LogoDark from '../../../public/tlv-logo-full-dark.png';
-import LogoLight from '../../../public/tlv-logo-full-light.png';
+import LogoDark from '../../../public/dialoq-logo-full-dark.png';
+import LogoLight from '../../../public/dialoq-logo-full-light.png';
 
 const LogoFull = (props: BoxProps): JSX.Element => {
   const { colorMode } = useColorMode();
@@ -8,7 +8,7 @@ const LogoFull = (props: BoxProps): JSX.Element => {
 
   return (
     <Box width="200px" {...props}>
-      <Image src={image} alt="Teclead Ventures" />
+      <Image src={image} alt="Dialoq" />
     </Box>
   );
 };

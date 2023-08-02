@@ -11,7 +11,7 @@ interface Props {
 const LessonsWidget = ({ title, lessons }: Props): ReactElement => {
   const gridTemplateColumns = useBreakpointValue({
     base: 'repeat(1, 1fr)',
-    sm: 'repeat(2, 1fr)',
+    sm: 'repeat(1, 1fr)',
     md: 'repeat(3, 1fr)',
     lg: 'repeat(4, 1fr)',
     xl: 'repeat(5, 1fr)',
@@ -20,7 +20,7 @@ const LessonsWidget = ({ title, lessons }: Props): ReactElement => {
   return (
     <VStack width="full" overflowX="scroll" alignItems="flex-start">
       <Text fontSize={['lg', 'xl', '2xl']}>{title}</Text>
-      <Grid gap="8px" templateColumns={gridTemplateColumns}>
+      <Grid gap="8px" templateColumns={gridTemplateColumns} width={'full'}>
         {lessons.length ? (
           lessons.map((lesson) => (
             <LessonCard key={lesson.id} lesson={lesson} />
