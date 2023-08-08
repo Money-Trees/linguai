@@ -1,13 +1,16 @@
-import { ReactElement, useEffect, useMemo, useState } from 'react';
+import React, { ReactElement, useEffect, useMemo, useState } from 'react';
 import { Card, HStack, Input, Text, VStack } from '@chakra-ui/react';
+import TaskQuestionTranslation from './TaskQuestionTranslation';
 
 interface Props {
   question: string;
-  onInputValuesChange: (inputValues: string[]) => void;
+  translation: string;
+  onInputValuesChange: (inputValues: string) => void;
 }
 
 const ClozeTestTask = ({
   question,
+  translation,
   onInputValuesChange,
 }: Props): ReactElement => {
   const regex = useMemo(() => /\[.*?]/, []);
@@ -28,7 +31,9 @@ const ClozeTestTask = ({
   }, [regex, tokens]);
 
   useEffect(() => {
-    onInputValuesChange(inputValues);
+    onInputValuesChange(
+      inputValues.filter((value) => !!value.trim()).join(', ')
+    );
   }, [inputValues, onInputValuesChange]);
 
   const handleChange = (index: number, newValue: string): void => {
@@ -50,6 +55,7 @@ const ClozeTestTask = ({
       width="100%"
     >
       <HStack wrap={'wrap'} alignItems="flex-start">
+        <TaskQuestionTranslation translation={translation} />
         {tokens.map((token, index) => {
           if (token.match(regex)) {
             const inputIndex = tokens

@@ -1,6 +1,12 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { Lesson, Task, TaskType } from '@naite/types';
-import { IsBoolean, IsEnum, IsString, IsUUID } from 'class-validator';
+import {
+  IsBoolean,
+  IsEnum,
+  IsNotEmpty,
+  IsString,
+  IsUUID,
+} from 'class-validator';
 import { DocumentDto } from '../../database/document.dto';
 
 export class TaskDto extends DocumentDto implements Task {
@@ -9,16 +15,18 @@ export class TaskDto extends DocumentDto implements Task {
   public lessonId!: Lesson['id'];
 
   @IsString()
-  @ApiProperty({ example: 'My Task!' })
-  public answer: string;
-
-  @IsString()
   @ApiProperty({ example: 'My Answer!' })
   public question: string;
 
   @IsString()
   @ApiProperty({ example: 'My translation!' })
   public translation: string;
+
+  @IsString({ each: true })
+  @IsNotEmpty()
+  @ApiProperty({ example: ['option1', 'option2', 'option3'] })
+  @ApiProperty({ example: 'My translation!' })
+  public options?: string;
 
   @IsEnum(TaskType)
   @ApiProperty({
@@ -32,7 +40,7 @@ export class TaskDto extends DocumentDto implements Task {
 
   @IsString()
   @ApiProperty({ example: 'Die' })
-  public modelAnswers: string;
+  public answer: string;
 }
 
 export class UpdateTaskDto extends PartialType(TaskDto) {}

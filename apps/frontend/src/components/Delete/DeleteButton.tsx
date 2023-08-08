@@ -1,17 +1,7 @@
-import {
-  AlertDialog,
-  AlertDialogBody,
-  AlertDialogContent,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogOverlay,
-  Button,
-  HStack,
-  IconButton,
-  Text,
-} from '@chakra-ui/react';
-import { useRef } from 'react';
+import { Button, HStack, IconButton } from '@chakra-ui/react';
+import { ReactElement } from 'react';
 import { AiFillDelete } from 'react-icons/ai';
+import AlertDiagram from '../AlertDiagram';
 
 interface DeleteButtonProps {
   title: string;
@@ -33,9 +23,7 @@ const DeleteButton = ({
   onDelete,
   buttonText,
   icon,
-}: DeleteButtonProps): JSX.Element => {
-  const cancelRef = useRef(null);
-
+}: DeleteButtonProps): ReactElement => {
   const deleteButton =
     icon && !buttonText ? (
       <IconButton
@@ -61,41 +49,13 @@ const DeleteButton = ({
   return (
     <>
       <HStack>{deleteButton}</HStack>
-      <AlertDialog
-        isOpen={isOpen}
-        leastDestructiveRef={cancelRef}
+      <AlertDiagram
+        open={isOpen}
         onClose={onClose}
-      >
-        <AlertDialogOverlay>
-          <AlertDialogContent width={['80%', 'md', 'md']}>
-            <AlertDialogHeader fontSize="lg" fontWeight="bold">
-              Delete {title}
-            </AlertDialogHeader>
-            <AlertDialogBody>
-              <Text>Are you sure?</Text>
-              <Text>You can't undo this action afterwards.</Text>
-            </AlertDialogBody>
-            <AlertDialogFooter>
-              <Button
-                variant="ghost"
-                colorScheme="gray"
-                ref={cancelRef}
-                onClick={onClose}
-              >
-                Cancel
-              </Button>
-              <Button
-                colorScheme="red"
-                isLoading={isLoading}
-                onClick={onDelete}
-                ml={3}
-              >
-                Delete
-              </Button>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialogOverlay>
-      </AlertDialog>
+        title={title}
+        loading={isLoading}
+        onClick={onDelete}
+      />
     </>
   );
 };

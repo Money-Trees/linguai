@@ -1,10 +1,9 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import TaskDescription from './TaskDescription';
-import ClozeTestTask from './ClozeTestTask';
-import TaskQuestionTranslation from './TaskQuestionTranslation';
 import { Button, Card, HStack, Text } from '@chakra-ui/react';
 import { Task, Subtopic } from '@naite/types';
 import { useUpdateTask } from '../../services/task.service';
+import TaskRenderer from './TaskRenderer';
 
 interface TaskProps {
   task: Task;
@@ -22,10 +21,17 @@ const TaskContainer = ({ task, subtopic }: TaskProps): React.JSX.Element => {
   const [taskState, setTaskState] = useState<TaskState>(initialTaskState);
   const { mutate: updateTask } = useUpdateTask(task.id);
 
-  const handleInputValuesChange = useCallback((inputValues: string[]): void => {
+  useEffect(() => {
     setTaskState({
       type: 'UNANSWERED',
-      answer: inputValues.filter((value) => !!value.trim()).join(', '),
+      answer: '',
+    });
+  }, [task]);
+
+  const handleInputValuesChange = useCallback((input: string): void => {
+    setTaskState({
+      type: 'UNANSWERED',
+      answer: input,
     });
   }, []);
 
@@ -34,7 +40,7 @@ const TaskContainer = ({ task, subtopic }: TaskProps): React.JSX.Element => {
       return;
     }
 
-    if (taskState.answer === task.modelAnswers) {
+    if (taskState.answer === task.answer) {
       setTaskState((prevState) => ({
         type: 'CORRECT',
         answer: prevState.answer,
@@ -53,12 +59,9 @@ const TaskContainer = ({ task, subtopic }: TaskProps): React.JSX.Element => {
 
   return (
     <>
+      {task.answer}
       <TaskDescription taskType={task.type} lessonSubtopic={subtopic} />
-      <ClozeTestTask
-        question={task.question}
-        onInputValuesChange={handleInputValuesChange}
-      />
-      <TaskQuestionTranslation translation={task.translation} />
+      <TaskRenderer task={task} onChange={handleInputValuesChange} />
       {taskState.type === 'UNANSWERED' && (
         <HStack width="100%" justifyContent="flex-end">
           <Button isDisabled={!taskState.answer} onClick={() => answerTask()}>

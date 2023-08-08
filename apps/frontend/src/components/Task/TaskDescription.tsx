@@ -1,5 +1,5 @@
 import React from 'react';
-import { TaskType, Subtopic } from '@naite/types';
+import { Subtopic, TaskType } from '@naite/types';
 import { Box, Heading } from '@chakra-ui/react';
 
 interface TaskDescriptionProps {
@@ -11,18 +11,15 @@ const TaskDescription = ({
   taskType,
   lessonSubtopic,
 }: TaskDescriptionProps): React.JSX.Element => {
-  const clozeDescription = `Please fill in the gaps with the correct ${lessonSubtopic}.`;
-
-  const getDescription = (): string => {
-    switch (taskType) {
-      case TaskType.Cloze:
-        return clozeDescription;
-    }
+  const descriptionMap = {
+    [TaskType.Cloze]: `Please fill in the gaps with the correct ${lessonSubtopic}.`,
+    [TaskType.Select]: `Select the correct meaning of this word`,
+    [TaskType.Arrange]: `Please arrange the sentence`,
   };
 
   return (
     <Box paddingY="4" whiteSpace="pre-wrap" width="100%">
-      <Heading size="md">{getDescription()}</Heading>
+      <Heading size="md">{descriptionMap[taskType]}</Heading>
     </Box>
   );
 };

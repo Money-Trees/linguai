@@ -8,9 +8,9 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { FaEllipsisV } from 'react-icons/fa';
-import DeleteButton from '../Delete/DeleteButton';
 import { useDeleteLesson } from '../../services/lesson.service';
 import { Lesson } from '@naite/types';
+import AlertDiagram from '../AlertDiagram';
 
 interface LessonCardMenuProps {
   lesson: Lesson;
@@ -23,30 +23,29 @@ export const LessonCardMenu = ({
   const { mutate: deleteLesson } = useDeleteLesson();
 
   return (
-    <Menu>
-      <MenuButton
-        as={IconButton}
-        alignItems={'center'}
-        display={'flex'}
-        justifyContent={'end'}
-        aria-label="menu"
-        variant="unstyled"
-        _dark={{ color: 'gray.200' }}
-        icon={<FaEllipsisV />}
+    <>
+      <AlertDiagram
+        open={isOpen}
+        title={'Delete Lesson'}
+        onClick={() => deleteLesson(lesson.id)}
+        onClose={onClose}
       />
-      <MenuList>
-        <MenuItem>
-          <DeleteButton
-            onClose={onClose}
-            onDelete={() => deleteLesson(lesson.id)}
-            onOpen={onOpen}
-            isOpen={isOpen}
-            title={'Lesson'}
-            buttonText={'Delete Lesson'}
-            icon={true}
-          />
-        </MenuItem>
-      </MenuList>
-    </Menu>
+      <Menu>
+        <MenuButton
+          as={IconButton}
+          alignItems={'center'}
+          display={'flex'}
+          justifyContent={'end'}
+          aria-label="menu"
+          variant="unstyled"
+          _dark={{ color: 'gray.200' }}
+          icon={<FaEllipsisV />}
+        />
+        <MenuList>
+          <MenuItem isDisabled>Rename</MenuItem>
+          <MenuItem onClick={onOpen}>Delete</MenuItem>
+        </MenuList>
+      </Menu>
+    </>
   );
 };

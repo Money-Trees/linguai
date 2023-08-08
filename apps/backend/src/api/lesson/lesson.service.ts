@@ -6,13 +6,14 @@ import {
 } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Lesson, Prompt, Role, Task, TaskType, User } from '@naite/types';
+import { Lesson, Prompt, Role, Task, TaskAllocation, User } from '@naite/types';
 import { DeleteResult, Repository } from 'typeorm';
 import { LessonEntity } from './lesson.entity';
 import { UserEntity } from '../user/user.entity';
 import { OpenAiService } from './openai.service';
 import { TaskService } from '../task/task.service';
-import { lessonPromptTemplate } from './lesson.prompt-template';
+import lessonConfig from './lesson.config';
+import { promptMap } from './prompt-map';
 
 @Injectable()
 export class LessonService {
@@ -58,21 +59,23 @@ export class LessonService {
     const lesson = this.repository.create({ ...data, userId });
     await this.repository.save(lesson);
 
-    const responseString = await this.openAiService.createChatCompletion(
-      new Prompt(lessonPromptTemplate, lesson)
-    );
+    const taskAllocation: TaskAllocation =
+      lessonConfig[lesson.subtopic] || lessonConfig['default'];
+    const allocationEntries = Object.entries(taskAllocation);
 
-    const tasks = responseString
-      .trim()
-      .split('\n')
-      .map((line): Partial<Task> => {
-        return this.parseOpenApiResponseForClozeTask(line, lesson);
-      });
+    const parsedTasks: Partial<Task>[] = [];
 
-    const taskEntities = await this.taskService.createTasks(tasks);
+    for (let i = 0; i < allocationEntries.length; i++) {
+      const [taskType, taskCount] = allocationEntries[i];
+      const prompt = new Prompt(promptMap[taskType], lesson, taskCount);
+      const responseTasks = await this.openAiService.createChatCompletion(
+        prompt,
+        lesson.id
+      );
+      responseTasks.forEach((task) => parsedTasks.push(task));
+    }
 
-    console.log(responseString);
-    console.log(taskEntities);
+    const taskEntities = await this.taskService.createTasks(parsedTasks);
 
     return { ...lesson, tasks: taskEntities };
   }
@@ -103,35 +106,6 @@ export class LessonService {
     await this.repository.update(id, data);
 
     return this.getLessonById(id);
-  }
-
-  private parseOpenApiResponseForClozeTask(
-    line: string,
-    lesson: LessonEntity
-  ): Partial<Task> {
-    const lineWithoutNumberIndex = line.replace(/^\d+\.\s/, '');
-    const [question, translation] = lineWithoutNumberIndex.split(' - ');
-
-    const wordsInSquareBracketsRegEx = /(\[.*?\])/g;
-    const modelAnswerWithBracketsMatches = question.match(
-      wordsInSquareBracketsRegEx
-    );
-
-    const modelAnswers = modelAnswerWithBracketsMatches?.map((ma) =>
-      ma.replace(/[\\[\]]/g, '').trim()
-    );
-
-    if (!modelAnswers || modelAnswers.length === 0 || !question) {
-      throw new Error(`Invalid line format: ${line}`);
-    }
-
-    return {
-      question,
-      modelAnswers: modelAnswers.join(', '),
-      translation,
-      type: TaskType.Cloze,
-      lessonId: lesson.id,
-    };
   }
 
   private hasAccessToLesson(lesson: Lesson): boolean {

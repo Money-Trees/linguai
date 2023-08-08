@@ -6,7 +6,7 @@ import { LessonEntity } from '../lesson/lesson.entity';
 @Entity('task')
 export class TaskEntity extends DocumentEntity implements Task {
   @Column()
-  public modelAnswers: string;
+  public answer: string;
 
   @Column()
   public question: string;
@@ -19,6 +19,9 @@ export class TaskEntity extends DocumentEntity implements Task {
     enum: TaskType,
   })
   public type: TaskType;
+
+  @Column({ nullable: true })
+  public options: string;
 
   @Column({ nullable: true })
   public isCompleted?: boolean;

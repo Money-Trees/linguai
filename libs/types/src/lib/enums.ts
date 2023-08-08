@@ -5,6 +5,8 @@ export enum Role {
 
 export enum TaskType {
   Cloze = 'cloze',
+  Select = 'select',
+  Arrange = 'arrange',
 }
 
 export enum Language {

@@ -35,12 +35,17 @@ export interface Lesson extends Document {
   tasks?: Task[];
 }
 
+export interface LessonPromptParams extends Lesson {
+  taskCount: number;
+}
+
 export interface Task extends Document {
   question: string;
-  translation: string;
-  modelAnswers: string;
+  answer: string;
   isCompleted?: boolean;
   type: TaskType;
   lessonId: string;
+  translation: string;
+  options?: string;
   lesson?: Lesson;
 }
