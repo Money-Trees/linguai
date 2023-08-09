@@ -40,7 +40,7 @@ const TaskContainer = ({ task, subtopic }: TaskProps): React.JSX.Element => {
       return;
     }
 
-    if (taskState.answer === task.answer) {
+    if (taskState.answer.trim() === task.answer.trim()) {
       setTaskState((prevState) => ({
         type: 'CORRECT',
         answer: prevState.answer,

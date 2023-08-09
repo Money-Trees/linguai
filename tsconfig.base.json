@@ -10,6 +10,7 @@
     "module": "esnext",
     "moduleResolution": "node",
     "paths": {
+      "@linguai/utils": ["libs/utils/src/index.ts"],
       "@naite/types": ["libs/types/src/index.ts"],
       "@naite/utils": ["libs/utils/src/index.ts"]
     },

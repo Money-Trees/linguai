@@ -14,7 +14,7 @@ const TaskDescription = ({
   const descriptionMap = {
     [TaskType.Cloze]: `Please fill in the gaps with the correct ${lessonSubtopic}.`,
     [TaskType.Select]: `Select the correct meaning of this word`,
-    [TaskType.Arrange]: `Please arrange the sentence`,
+    [TaskType.Arrange]: `Please arrange the sentence in the correct order`,
   };
 
   return (

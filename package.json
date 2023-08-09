@@ -40,6 +40,7 @@
     "@nrwl/web": "16.6.0",
     "@nrwl/webpack": "16.6.0",
     "@nrwl/workspace": "16.6.0",
+    "@nx/js": "16.6.0",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.7",
     "@svgr/webpack": "8.0.1",
     "@swc/core": "^1.2.173",
@@ -122,4 +123,3 @@
     "typeorm": "^0.3.17"
   }
 }
-

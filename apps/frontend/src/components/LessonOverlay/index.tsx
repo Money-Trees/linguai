@@ -4,7 +4,7 @@ import LessonForm from '../LessonForm';
 import { Language, Lesson, RequestBody } from '@naite/types';
 import { useAuthUser } from '../../services/user.service';
 import { useAddLesson } from '../../services/lesson.service';
-import { HStack, Show, Spinner, Text } from '@chakra-ui/react';
+import { HStack, Progress, Show, Spinner, Text } from '@chakra-ui/react';
 import DrawerContainer from '../DrawerContainer';
 
 interface Props {
@@ -63,7 +63,7 @@ const LessonOverlay = ({ isOpen, onClose, language }: Props): ReactElement => {
           isLoading={isLoading}
         >
           {isLoading ? (
-            <Spinner />
+            <Progress size="xs" isIndeterminate />
           ) : (
             <LessonForm lessonData={lessonData} onChange={handleChange} />
           )}

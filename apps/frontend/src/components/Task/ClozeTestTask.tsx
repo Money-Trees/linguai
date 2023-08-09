@@ -32,7 +32,7 @@ const ClozeTestTask = ({
 
   useEffect(() => {
     onInputValuesChange(
-      inputValues.filter((value) => !!value.trim()).join(', ')
+      inputValues.filter((value) => !!value.trim()).join(',')
     );
   }, [inputValues, onInputValuesChange]);
 

@@ -23,7 +23,7 @@ export enum GermanSuperTopics {
 export enum GermanTopic {
   Articles = 'articles',
   PossessivePronouns = 'possessivePronouns',
-  PresentTense = 'presentTense',
+  PresentTenseVerbs = 'presentTenseVerbs',
 }
 
 export enum FrenchTopic {

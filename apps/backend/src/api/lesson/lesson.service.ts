@@ -14,6 +14,7 @@ import { OpenAiService } from './openai.service';
 import { TaskService } from '../task/task.service';
 import lessonConfig from './lesson.config';
 import { promptMap } from './prompt-map';
+import { shuffleArray } from '@naite/utils';
 
 @Injectable()
 export class LessonService {
@@ -76,6 +77,7 @@ export class LessonService {
     }
 
     const taskEntities = await this.taskService.createTasks(parsedTasks);
+    shuffleArray(taskEntities);
 
     return { ...lesson, tasks: taskEntities };
   }

@@ -49,7 +49,8 @@ export const clozePrompt = {
         {
           sentence: string,
           translation: string,
-          answer: string  // content of all square brackets (without the brackets) in correct order and separated by comma
+          answer: string
+          /* content of all square brackets (without the brackets) in correct order and separated by comma. Example: sentence -> "[Mein] Computer steht auf ihren Tisch" answer -> Mein,ihren */
         }
         ...
       ]

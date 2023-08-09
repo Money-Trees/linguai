@@ -7,7 +7,7 @@ import { useLessons } from '../services/lesson.service';
 import LessonOverlay from '../components/LessonOverlay';
 
 const HomePage = (): ReactElement => {
-  const { data: lessons = [] } = useLessons();
+  const { data: lessons = [] } = useLessons({ select: 'tasks' });
   const [language, setLanguage] = useState(Language.German);
   const { isOpen, onOpen, onClose } = useDisclosure();
 

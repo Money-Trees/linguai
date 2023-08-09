@@ -22,7 +22,7 @@ export const selectPrompt = {
       data: [
         {
           vocabulary: string,
-          options: string // options separated by comma without whitespace like this: "option1,option2,option3"
+          options: string // translation options separated by comma without whitespace like this: "option1,option2,option3"
           correctAnswer: string
         }
       ]

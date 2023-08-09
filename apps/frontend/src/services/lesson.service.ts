@@ -16,8 +16,10 @@ interface LessonParams {
   select: LessonSelect;
 }
 
-export const useLessons = <T extends Lesson[]>(): UseQueryResult<Lesson[]> =>
-  useQuery(['lessons'], () => request<T>(`/lessons`));
+export const useLessons = <T extends Lesson[]>(
+  params?: LessonParams
+): UseQueryResult<Lesson[]> =>
+  useQuery(['lessons'], () => request<T>(`/lessons`, { params }));
 
 export const useLesson = <T extends Lesson>(
   id?: string,

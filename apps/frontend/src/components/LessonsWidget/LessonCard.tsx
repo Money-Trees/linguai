@@ -51,16 +51,21 @@ const LessonCard = ({ lesson }: { lesson: Lesson }): ReactElement => {
       </CardHeader>
       <CardBody>
         <VStack alignItems="flex-start" gap={4}>
-          <Progress
-            borderRadius={'md'}
-            value={getCompletedPercentage()}
-            isAnimated={true}
-            sx={{
-              '& > div:first-child': {
-                transitionProperty: 'width',
-              },
-            }}
-          />
+          <VStack alignItems="flex-start" gap={2} width="full">
+            <Box width="full">
+              <Progress
+                borderRadius={'md'}
+                value={getCompletedPercentage()}
+                isAnimated={true}
+                sx={{
+                  '& > div:first-child': {
+                    transitionProperty: 'width',
+                  },
+                }}
+              />
+            </Box>
+            <Text>Progress: {getCompletedPercentage()}%</Text>
+          </VStack>
           <Box>
             <Text>Theme: </Text>
             <Badge>{lesson.theme}</Badge>
